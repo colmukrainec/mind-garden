@@ -1,6 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
+# Mind Garden
 
 First, run the development server:
 
@@ -38,3 +36,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Architecture Diagram
 ![arch](public/arch.jpg)
 
+
+## Meet the Contributors
+
+| **Name** | **Github Username** |
+| --- | --- |
+| Ji Min Ryu (Group Leader) | @jiminryuu |
+| Manisha Gurukumar  | @gmanishaa |
+| Hassan Khan | @hkhan701 |
+| Caroline Nieminen | @cnieminen |
+| Aiden Park | @orca277 |
+| Colm Ukrainec | @colmukrainec |
