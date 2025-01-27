@@ -43,3 +43,6 @@ next-env.d.ts
 # extra
 /.idea
 /.vscode
+
+# block architecture diagram
+/public/arch.jpg
