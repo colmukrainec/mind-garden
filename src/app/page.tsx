@@ -40,6 +40,14 @@ export default function Home() {
           backgroundPosition: "center",
         }}
       >
+      <div
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{
+          backgroundImage: `url(/gradient.svg)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 border border-green-100">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-green-700 mb-2">MindGarden</h1>
@@ -123,9 +131,14 @@ export default function Home() {
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-green-600 hover:text-green-700 font-medium focus:outline-none"
+                type="button"
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-green-600 hover:text-green-700 font-medium focus:outline-none"
               >
                 {isLogin ? "Sign up" : "Log in"}
+                {isLogin ? "Sign up" : "Log in"}
               </button>
+            </p>
             </p>
           </form>
         </div>
