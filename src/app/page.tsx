@@ -1,10 +1,34 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { login, signup } from "./login/actions";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState('');
+
+  /**
+   * Handles authentication by calling the appropriate function
+   * (login or signup) based on the value of isLogin. If the
+   * authentication is successful, it resets the error message.
+   * If there is an error, it stores the error message in the
+   * error state.
+   * @param {FormData} formData - The form data to be passed to
+   * the authentication function
+   */
+  const handleAuth = async (formData: FormData) => {
+    const result = await (isLogin ? login(formData) : signup(formData));
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      setError('');
+    }
+  };
+
+  // Reset the error message when the user switches between login and signup
+  useEffect(() => {
+    setError('');
+  }, [isLogin]);
 
   return (
     <>
@@ -21,8 +45,14 @@ export default function Home() {
             <h1 className="text-3xl font-bold text-green-700 mb-2">MindGarden</h1>
             <p className="text-gray-500">Cultivate Your Mental Wellness</p>
           </div>
-          
-          <form className="space-y-6">
+
+          <form action={handleAuth} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center space-x-2">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
+
             {!isLogin && (
               <>
                 <div className="flex space-x-4">
@@ -82,7 +112,6 @@ export default function Home() {
 
             <button
               type="submit"
-              formAction={isLogin ? login : signup}
               className="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300 ease-in-out"
             >
               {isLogin ? "Log in" : "Sign up"}
