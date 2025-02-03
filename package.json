@@ -10,7 +10,9 @@
     "lint:fix": "eslint . --fix",
     "lint:check": "eslint . --max-warnings 0",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:seq": "NODE_ENV=test ENV=test jest --runInBand --testPathPattern='/src/' --bail=false",
+    "test:seq:failed": "NODE_ENV=test ENV=test jest --runInBand NODE_ENV=test ENV=test --testPathPattern='/src/' --bail=false --onlyFailures",
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.0",
