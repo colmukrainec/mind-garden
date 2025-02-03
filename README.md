@@ -1,6 +1,14 @@
 # Mind Garden
 
-First, run the development server:
+Docker for Database
+
+```bash
+cd docker
+
+docker-compose up -d mind-garden-db
+```
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -36,6 +44,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Architecture Diagram
 ![arch](public/arch.jpg)
 
+## CodeQL Setup
+
+Setting up code scan/code review
+
+1. Go to GitHub repository’s security tab
+2. Go to Code Scanning submenu
+3. Modify the settings to preferences
 
 ## Meet the Contributors
 

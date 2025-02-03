@@ -1,0 +1,46 @@
+name: test
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Set up database resource
+        env:
+          POSTGRES_PASSWORD: postgres
+          HOST: localhost
+          POSTGRES_USER: postgres
+          PORT: 5436
+        run: |
+          cd docker
+          docker compose up -d
+          until PGPASSWORD=$POSTGRES_PASSWORD psql -h $HOST -p $PORT -U $POSTGRES_USER -c '\q'; do
+            >&2 echo "Postgres is unavailable - sleeping"
+            sleep 1
+          done
+          cd ..
+
+      - name: Change Env variables
+        run: |
+          echo DATABASE_URL=\"postgresql://postgres:postgres@localhost:5436/mind-garden\" > .env
+
+      - name: Install dependencies
+        run: |
+          npm install
+      - name: Run tests
+        run: |
+          cp .env.sample .env
+          npm run test:seq
