@@ -2,8 +2,38 @@
 
 import React, { useEffect, useState } from 'react';
 import { login, signup } from "./login/actions";
+'use client'
+
+import React, { useEffect, useState } from 'react';
+import { login, signup } from "./login/actions";
 
 export default function Home() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState('');
+
+  /**
+   * Handles authentication by calling the appropriate function
+   * (login or signup) based on the value of isLogin. If the
+   * authentication is successful, it resets the error message.
+   * If there is an error, it stores the error message in the
+   * error state.
+   * @param {FormData} formData - The form data to be passed to
+   * the authentication function
+   */
+  const handleAuth = async (formData: FormData) => {
+    const result = await (isLogin ? login(formData) : signup(formData));
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      setError('');
+    }
+  };
+
+  // Reset the error message when the user switches between login and signup
+  useEffect(() => {
+    setError('');
+  }, [isLogin]);
+
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState('');
 
