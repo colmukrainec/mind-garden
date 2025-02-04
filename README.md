@@ -145,15 +145,6 @@ For this project, we are leveraging modern technologies to ensure scalability, m
 
 
 
-
-Docker for Database
-
-```bash
-cd docker
-
-docker-compose up -d mind-garden-db
-```
-
 Run the development server:
 
 ```bash
