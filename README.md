@@ -143,7 +143,11 @@ For this project, we are leveraging modern technologies to ensure scalability, m
 ![arch](public/arch.jpg)
 
 
+Creating .env file
 
+```bash
+cp .env.sample .env
+```
 
 Run the development server:
 
