@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
-import { logout } from "@/app/logout/actions";  
+import { logout } from "@/app/auth/actions";  
 
 import { createClient } from '@/utils/supabase/server'
+import DeleteAccount from '../components/DeleteAccount';
 
 export default async function PrivatePage() {
   const supabase = await createClient()
@@ -42,6 +43,7 @@ export default async function PrivatePage() {
         >
           Logout
         </button>
+        <DeleteAccount userId={userId} />
       </div>
     </div>
   )
