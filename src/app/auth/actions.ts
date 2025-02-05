@@ -50,3 +50,30 @@ export async function signup(formData: FormData) {
   revalidatePath('/', 'layout')
   redirect('/home')
 }
+
+export async function logout() {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    redirect('/error')
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
+
+export async function deleteAccount(userId: string) {
+  const supabase = await createClient()
+
+  // Delete user from system and their data ( this requires the service role key )
+  const { error: authError } = await supabase.auth.admin.deleteUser(userId)
+
+  if (authError) {
+    redirect('/error')
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
