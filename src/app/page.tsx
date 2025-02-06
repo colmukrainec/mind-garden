@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { login, signup } from "./login/actions";
+import { login, signup } from "./auth/actions";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
