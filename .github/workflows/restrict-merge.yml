@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Fail if merging directly to main from any branch other than develop
         run: |
-          if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" != "develop" ]]; then
+          if [[ "${{ github.event.pull_request.base.ref }}" == "main" && "${{ github.event.pull_request.head.ref }}" != "develop" ]]; then
             echo "❌ Only 'develop' can be merged into 'main'."
             exit 1
           fi
