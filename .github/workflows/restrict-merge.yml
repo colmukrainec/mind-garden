@@ -9,9 +9,15 @@ jobs:
   check-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Fail if not merging from develop
+      - name: Fail if merging directly to main from any branch other than develop
         run: |
           if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" != "develop" ]]; then
             echo "❌ Only 'develop' can be merged into 'main'."
+            exit 1
+          fi
+      - name: Fail if merging directly to develop from main
+        run: |
+          if [[ "${{ github.base_ref }}" == "develop" && "${{ github.head_ref }}" == "main" ]]; then
+            echo "❌ 'main' cannot be merged into 'develop'."
             exit 1
           fi
