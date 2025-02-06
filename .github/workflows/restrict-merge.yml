@@ -1,0 +1,17 @@
+name: Restrict Merge Into Main
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if not merging from develop
+        run: |
+          if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" != "develop" ]]; then
+            echo "❌ Only 'develop' can be merged into 'main'."
+            exit 1
+          fi
