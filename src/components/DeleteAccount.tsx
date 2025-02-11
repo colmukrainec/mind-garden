@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteAccount } from "@/app/auth/actions";
+import { deleteAccount } from "@/actions/auth";
 
 export default function DeleteAccount(props: { userId: string }) {
     return (
