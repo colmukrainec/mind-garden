@@ -6,6 +6,7 @@ import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import Footer from '@/components/footer'
+import DataIntakeForm from "@/components/data-intake-form";
 
 export default async function PrivatePage() {
   const supabase = await createClient()
@@ -61,7 +62,7 @@ export default async function PrivatePage() {
       </header>
 
       <main className="flex-1 container mx-auto px-4 py-8">
-
+        <DataIntakeForm />
       </main>
 
       <Footer />
