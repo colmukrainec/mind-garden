@@ -41,10 +41,10 @@ const DataIntakeForm: React.FC = () => {
   const attributesByCategory = useMemo(() => {
     const map = new Map();
     if (attributes.length && categories) {
-      categories.forEach(category => {
+      categories.forEach((category: any) => {
         map.set(
           category.id,
-          attributes.filter(attr => attr.category_id === category.id)
+          attributes.filter((attr: any) => attr.category_id === category.id)
         );
       });
     }
@@ -87,7 +87,7 @@ const DataIntakeForm: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap justify-center gap-2">
-                  {categoryAttributes.map(attr => (
+                  {categoryAttributes.map((attr: any) => (
                     <ToggleButton
                       key={attr.id}
                       value={attr.id}
