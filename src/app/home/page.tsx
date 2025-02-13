@@ -44,9 +44,9 @@ export default async function PrivatePage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <img src="/logo.png" alt="MindGarden Logo" className="h-7 w-7 mr-2" />
+            <img src="/logo.png" alt="Mind Garden Logo" className="h-7 w-7 mr-2" />
             <p className="text-2xl font-semibold text-green-700">
-              MindGarden
+              Mind Garden
             </p>
           </div>
           <div className="flex items-center gap-4">

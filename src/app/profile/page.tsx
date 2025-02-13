@@ -38,8 +38,8 @@ export default async function ProfilePage() {
             <header className="border-b bg-white/50 backdrop-blur-sm mt-4 mx-4 rounded-full">
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                     <div className="flex items-center">
-                        <img src="/logo.png" alt="MindGarden Logo" className="h-7 w-7 mr-2" />
-                        <p className="text-2xl font-semibold text-green-700">MindGarden</p>
+                        <img src="/logo.png" alt="Mind Garden Logo" className="h-7 w-7 mr-2" />
+                        <p className="text-2xl font-semibold text-green-700">Mind Garden</p>
                     </div>
                     <div className="flex items-center gap-4">
                         <Button variant="ghost" size="icon">

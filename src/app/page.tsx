@@ -51,7 +51,7 @@ export default function Home() {
       />
       <div className="text-center mb-12 relative">
         <h1 className="text-7xl md:text-8xl font-bold bg-gradient-to-r from-green-400 to-blue-400 text-transparent bg-clip-text mb-4">
-          MindGarden
+          Mind Garden
         </h1>
         <div className="text-2xl text-gray-600 flex justify-left items-center">
           <span className="mr-2">Cultivate Your</span>
