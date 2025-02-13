@@ -1,8 +1,11 @@
 import { redirect } from 'next/navigation'
-import { logout } from "@/actions/auth";  
+import { Bell } from "lucide-react"
 
 import { createClient } from '@/utils/supabase/server'
-import DeleteAccount from '../../components/DeleteAccount';
+import { Particles } from "@/components/magicui/particles"
+import { Button } from "@/components/ui/button"
+import { ProfileDropdown } from '@/components/profile-dropdown';
+import Footer from '@/components/footer'
 
 export default async function PrivatePage() {
   const supabase = await createClient()
@@ -24,27 +27,44 @@ export default async function PrivatePage() {
   }
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4"
-      style={{
-        backgroundImage: `url(/gradient.svg)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 border border-green-100 text-center">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-green-700 mb-4">Welcome, {profileData?.first_name} {profileData?.last_name}!</h1>
-          <p className="text-gray-600 mb-8">Your email: {profileData?.email}</p>
+    <div className="min-h-screen flex flex-col" style={{
+      backgroundImage: `url(/gradient.svg)`,
+      backgroundSize: "cover",
+    }}>
+
+      <Particles
+        className="absolute inset-0 z-0"
+        quantity={200}
+        ease={80}
+        color={"#000000"}
+        refresh
+      />
+
+      <header className="border-b bg-white/50 backdrop-blur-sm mt-4 mx-4 rounded-full">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center">
+            <img src="/logo.png" alt="Mind Garden Logo" className="h-7 w-7 mr-2" />
+            <p className="text-2xl font-semibold text-green-700">
+              Mind Garden
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+
+            {/* Notifications for next sprint not currently implemented */}
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
+            </Button>
+            <ProfileDropdown />
+          </div>
         </div>
-        <button
-          onClick={logout}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300 ease-in-out"
-        >
-          Logout
-        </button>
-        <DeleteAccount userId={userId} />
-      </div>
+      </header>
+
+      <main className="flex-1 container mx-auto px-4 py-8">
+
+      </main>
+
+      <Footer />
     </div>
   )
 }

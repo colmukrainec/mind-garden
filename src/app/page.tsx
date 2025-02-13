@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Mail, Lock, User, CircleAlert } from "lucide-react"
 import { Particles } from "@/components/magicui/particles";
 import { WordRotate } from "@/components/magicui/word-rotate";
+import Footer from '@/components/footer';
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
@@ -39,9 +40,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center py-16" style={{
-      backgroundImage: `url(/gradient.svg)`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
+      backgroundImage: `url(/gradient.svg)`, backgroundSize: "cover",
     }}>
       <Particles
         className="absolute inset-0 z-0"
@@ -52,7 +51,7 @@ export default function Home() {
       />
       <div className="text-center mb-12 relative">
         <h1 className="text-7xl md:text-8xl font-bold bg-gradient-to-r from-green-400 to-blue-400 text-transparent bg-clip-text mb-4">
-          MindGarden
+          Mind Garden
         </h1>
         <div className="text-2xl text-gray-600 flex justify-left items-center">
           <span className="mr-2">Cultivate Your</span>
@@ -78,7 +77,7 @@ export default function Home() {
       </div>
 
 
-      <Card className="w-full max-w-2xl backdrop-blur-sm bg-white/90 shadow-xl border-0 rounded-2xl">
+      <Card className="w-full max-w-2xl backdrop-blur-sm bg-white/50 shadow-xl border-0 rounded-2xl">
         <CardContent className="space-y-8 p-12">
           <form action={handleAuth} className="space-y-8">
             {error && (
@@ -164,6 +163,7 @@ export default function Home() {
           </form>
         </CardContent>
       </Card>
+      <Footer />
     </div>
   )
 }
