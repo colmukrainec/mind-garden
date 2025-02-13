@@ -11,6 +11,7 @@ SERVER_PID=$!
 echo "Waiting for Ollama server to become available..."
 sleep 5
 
+# check if model is available, if not pull it
 echo "Checking if model 'llama3.2:1b' is available..."
 if /bin/ollama list | grep -q "llama3.2:1b"; then
     echo "Model 'llama3.2:1b' is already available."
@@ -19,6 +20,7 @@ else
     /bin/ollama run llama3.2:1b
 fi
 
+# check if custom model is available, if not create it
 echo "Creating custom model from 'llama3.2:1b'called summarization model..."
 if /bin/ollama list | grep -q "summarization-model"; then
     echo "Model summarization-model is already available."

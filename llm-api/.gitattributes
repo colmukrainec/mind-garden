@@ -1,3 +1,0 @@
-#Ensure that entrypoint.sh is checked out with LF line endings
-#This is necessary for the entrypoint.sh script to work correctly on our docker image as it uses a linux base
-"entrypoint.sh text eol=lf" 
