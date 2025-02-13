@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import { Bell } from "lucide-react"
 
-import DeleteAccount from '../../components/DeleteAccount';
 import { createClient } from "@/utils/supabase/server"
 import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
