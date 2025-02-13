@@ -27,12 +27,16 @@ export default async function PrivatePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{
+    <div
+      className="min-h-screen flex flex-col" 
+      // Gradient background
+      style={{
       backgroundImage: `url(/gradient.svg)`,
       backgroundSize: "cover",
-    }}>
-
+      }}>
+      
       <Particles
+        // Particles background
         className="absolute inset-0 z-0"
         quantity={200}
         ease={80}
