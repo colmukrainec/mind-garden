@@ -1,7 +1,15 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { login, signup } from "./auth/actions";
+import { login, signup } from "../actions/auth";
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent } from "@/components/ui/card"
+import { Mail, Lock, User, CircleAlert } from "lucide-react"
+import { Particles } from "@/components/magicui/particles";
+import { WordRotate } from "@/components/magicui/word-rotate";
+import Footer from '@/components/footer';
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
@@ -31,105 +39,131 @@ export default function Home() {
   }, [isLogin]);
 
   return (
-    <>
-      <div
-        className="min-h-screen flex items-center justify-center p-4"
-        style={{
-          backgroundImage: `url(/gradient.svg)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8 border border-green-100">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-green-700 mb-2">MindGarden</h1>
-            <p className="text-gray-500">Cultivate Your Mental Wellness</p>
-          </div>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center py-16" style={{
+      backgroundImage: `url(/gradient.svg)`, backgroundSize: "cover",
+    }}>
+      <Particles
+        className="absolute inset-0 z-0"
+        quantity={200}
+        ease={80}
+        color={"#000000"}
+        refresh
+      />
+      <div className="text-center mb-12 relative">
+        <h1 className="text-7xl md:text-8xl font-bold bg-gradient-to-r from-green-400 to-blue-400 text-transparent bg-clip-text mb-4">
+          Mind Garden
+        </h1>
+        <div className="text-2xl text-gray-600 flex justify-left items-center">
+          <span className="mr-2">Cultivate Your</span>
+          <span className="text-4xl font-bold text-green-500 inline-flex items-center">
+            <WordRotate
+              className="inline-block"
+              words={[
+                "Mental Wellness",
+                "Growth",
+                "Mindfulness",
+                "Balance",
+                "Resilience",
+                "Well-being",
+                "Potential",
+                "Focus",
+                "Happiness",
+                "Strength",
+                "Self-awareness"
+              ]}
+            />
+          </span>
+        </div>
+      </div>
 
-          <form action={handleAuth} className="space-y-6">
+
+      <Card className="w-full max-w-2xl backdrop-blur-sm bg-white/50 shadow-xl border-0 rounded-2xl">
+        <CardContent className="space-y-8 p-12">
+          <form action={handleAuth} className="space-y-8">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center space-x-2">
-                <p className="text-sm text-red-600">{error}</p>
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex items-center space-x-3">
+                <CircleAlert className="h-6 w-6 text-red-600" />
+                <p className="text-base text-red-600">{error}</p>
               </div>
             )}
 
             {!isLogin && (
-              <>
-                <div className="flex space-x-4">
-                  <div className="flex-1">
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                      First Name
-                    </label>
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      required
-                      className="w-full px-4 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300 ease-in-out text-black"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Last Name
-                    </label>
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      required
-                      className="w-full px-4 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300 ease-in-out text-black"
-                    />
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <Label htmlFor="firstName" className="text-base">First Name</Label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                    <Input id="firstName" name="firstName" placeholder="John" className="pl-12 h-12 text-lg" required />
                   </div>
                 </div>
-              </>
+                <div className="space-y-3">
+                  <Label htmlFor="lastName" className="text-base">Last Name</Label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                    <Input id="lastName" name="lastName" placeholder="Doe" className="pl-12 h-12 text-lg" required />
+                  </div>
+                </div>
+              </div>
             )}
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="w-full px-4 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300 ease-in-out text-black"
-              />
+            <div className="space-y-3">
+              <Label htmlFor="email" className="text-base">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="john.doe@example.com"
+                  className="pl-12 h-12 text-lg"
+                  required
+                />
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="w-full px-4 py-3 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-300 ease-in-out text-black"
-              />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-base">Password</Label>
+                {isLogin && (
+                  <p className="text-base text-green-600 hover:text-green-700 transition-colors">
+                    Forgot password?
+                  </p>
+                )}
+              </div>
+              <div className="relative">
+                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder={isLogin ? "Enter your password" : "Create a strong password"}
+                  className="pl-12 h-12 text-lg"
+                />
+              </div>
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300 ease-in-out"
+              className="w-full h-12 text-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
             >
               {isLogin ? "Log in" : "Sign up"}
-            </button>
+            </Button>
 
-            <p className="text-center text-sm text-gray-600">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+            <div className="text-center">
+              <span className="text-base text-gray-600">{isLogin ? "Don't have an account?" : "Already have an account?"}</span>{" "}
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-green-600 hover:text-green-700 font-medium focus:outline-none"
+                className="text-base text-green-600 hover:text-green-700 font-medium transition-colors"
               >
                 {isLogin ? "Sign up" : "Log in"}
               </button>
-            </p>
+            </div>
           </form>
-        </div>
-      </div>
-    </>
-  );
+        </CardContent>
+      </Card>
+      <Footer />
+    </div>
+  )
 }
