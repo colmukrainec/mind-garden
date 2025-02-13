@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import Footer from "@/components/footer";
+import DeleteAccount from "@/components/delete-account";
 
 export default async function ProfilePage() {
     const supabase = await createClient()
