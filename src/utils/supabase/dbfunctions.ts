@@ -1,4 +1,4 @@
-import { createClient } from "./server";
+import { createClient } from "./client";
 
 /**
  * Inserts data into a given Supabase table

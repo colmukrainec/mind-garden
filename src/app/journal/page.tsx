@@ -1,14 +1,13 @@
 
 import { redirect } from 'next/navigation'
-import { Bell, NotebookPen, Brain} from "lucide-react"
+import { Bell } from "lucide-react"
 
 import { createClient } from '@/utils/supabase/server'
 import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
-import { TextArea } from '@/components/ui/textarea'
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import { JournalButton } from '@/components/journal-button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { JournalEntry } from '@/components/journal-entry';
 import Footer from '@/components/footer'
 
 export default async function JournalPage() {
@@ -73,32 +72,7 @@ export default async function JournalPage() {
 
 
       <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto space-y-8">
-            <Card className="bg-white/50 backdrop-blur-sm rounded-2xl">
-                {/* The Header For our Card */}
-                <CardHeader>
-                    <div className="flex items-center space-x-2"> 
-                            <CardTitle>Journal Entry</CardTitle>
-                            <NotebookPen className="h-6 w-6" />
-                    </div>
-                    <div className="flex items-center space-x-2"> 
-                            <CardDescription>Journal your thoughts </CardDescription>
-                            <Brain className="h-4 w-4" />
-                    </div>
-                    
-                </CardHeader>
-
-                {/* The Content of our Card */}
-                <CardContent className="space-y-10">
-                    <div className="space-y-2">
-                        <TextArea placeholder='Whats on your mind?'/>
-                    </div>
-                </CardContent>
-                <CardFooter>
-                    <Button>Update Profile</Button>
-                </CardFooter>
-            </Card>
-        </div>
+        <JournalEntry userId={userId}/>
 
       </main>
 
