@@ -7,7 +7,7 @@ import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import { JournalButton } from '@/components/journal-button';
-import { JournalEntry } from '@/components/journal-entry';
+import { JournalEntryCard } from '@/components/journal-entry';
 import Footer from '@/components/footer'
 
 export default async function JournalPage() {
@@ -72,7 +72,7 @@ export default async function JournalPage() {
 
 
       <main className="flex-1 container mx-auto px-4 py-8">
-        <JournalEntry userId={userId}/>
+        <JournalEntryCard userId={userId}/>
 
       </main>
 
