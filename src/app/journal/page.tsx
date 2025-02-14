@@ -1,14 +1,20 @@
+//Core Imports  
+import { redirect } from 'next/navigation';
 
-import { redirect } from 'next/navigation'
-import { Bell } from "lucide-react"
+// Third-Party Library Imports  
+import { Bell } from "lucide-react";
 
-import { createClient } from '@/utils/supabase/server'
-import { Particles } from "@/components/magicui/particles"
-import { Button } from "@/components/ui/button"
+// Utility
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
+
+// UI
+import { Particles } from "@/components/magicui/particles";
+import { Button } from "@/components/ui/button";
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import { JournalButton } from '@/components/journal-button';
 import { JournalEntryCard } from '@/components/journal-entry';
-import Footer from '@/components/footer'
+import Footer from '@/components/footer';
 
 export default async function JournalPage() {
   const supabase = await createClient()

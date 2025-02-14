@@ -1,20 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+//Core imports
+import { useState } from "react";
 
+//UI
+import {Card,CardContent,CardDescription,CardFooter,CardHeader,CardTitle} from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Brain, NotebookPen } from "lucide-react";
-import { saveJournalEntry, selectJournalEntries } from "@/utils/supabase/dbfunctions";
+import { saveJournalEntry } from "@/utils/supabase/dbfunctions";
 import { JournalSwipe } from "@/components/journal-swipe";
+
 
 interface JournalEntryProps {
   readonly userId: string;

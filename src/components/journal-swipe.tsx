@@ -1,5 +1,10 @@
+// Core imports
 import React, { useState, useEffect } from 'react';
+
+// Third party
 import { format } from 'date-fns';
+
+//UI
 import { selectJournalEntries } from '@/utils/supabase/dbfunctions';
 import SwiperUI from './ui/swiper';
 import 'swiper/css';
@@ -14,27 +19,23 @@ interface JournalEntry {
   entry_date: string;
 }
 
-/**
+/** useJounralEntries(userID: string)
  * Custom hook to manage journal entries with pagination
  * This hook handles loading, storing, and fetching more entries as needed
  */
 function useJournalEntries(userId: string) {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
-  const [currentEntryId, setCurrentID] = useState("");
+  const [currentEntryId, setCurrentEntryId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const ENTRIES_PER_PAGE = 5;
+  const ENTRIES_PER_PAGE = 5; 
 
-  // Use a ref to track if a fetch is in progress
-  const isFetchingRef = React.useRef(false);
 
   const fetchMoreEntries = async () => {
-    // Use the ref to prevent multiple simultaneous fetches
-    if (isFetchingRef.current || !hasMore) return;
-    
-    isFetchingRef.current = true;
-    setIsLoading(true);
+    // Prevent fetching more entries if we're already loading or at the end 
+    if (isLoading || !hasMore) return;
 
+    setIsLoading(true);
     try {
       const { data, error } = await selectJournalEntries(userId, currentEntryId);
 
@@ -47,27 +48,29 @@ function useJournalEntries(userId: string) {
           const existingIds = new Set(prev.map(entry => entry.id));
           const uniqueNewEntries = newEntries.filter(entry => !existingIds.has(entry.id));
           
+          //set the last retrieved entry ID
+          const lastEntry = data[data.length - 1] as unknown as JournalEntry;
+          if (lastEntry?.id) {
+            setCurrentEntryId(lastEntry.id);
+          }
+          //check if there more entries to fetch
+          setHasMore(data.length >= ENTRIES_PER_PAGE);
           return [...prev, ...uniqueNewEntries];
-        });
-
-        setCurrentID((data as unknown as JournalEntry[])[data.length - 1].id);
-        setHasMore(data.length >= ENTRIES_PER_PAGE);
+          
+        }); 
       }
     } catch (error) {
       console.error('Error fetching journal entries:', error);
     } finally {
       setIsLoading(false);
-      isFetchingRef.current = false;
     }
   };
 
   // Reset everything when userId changes
   useEffect(() => {
     setEntries([]);
-    setCurrentID("");
+    setCurrentEntryId("");
     setHasMore(true);
-    isFetchingRef.current = false;
-
     fetchMoreEntries();
 
   }, [userId]); // Add userId as a dependency
