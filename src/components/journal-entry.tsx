@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -13,21 +13,15 @@ import {
 import { TextArea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Brain, NotebookPen } from "lucide-react";
-import { insertData } from "@/utils/supabase/dbfunctions";
+import { saveJournalEntry, selectJournalEntries } from "@/utils/supabase/dbfunctions";
+import { JournalSwipe } from "@/components/journal-swipe";
 
 interface JournalEntryProps {
-  userId: string;
+  readonly userId: string;
 }
 
-export function JournalEntry({ userId }: JournalEntryProps) {
+export function JournalEntryCard({ userId }: JournalEntryProps) {
   const [entry, setEntry] = useState(""); // State to store textarea input
-
-  const handleSave = async () => {
-    if (!entry.trim()) return; // Prevent empty entries
-    await insertData("journal_entries", { user_id: userId,
-                                          journal_text: entry });
-    setEntry(""); // Clear input after saving
-  };
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
@@ -57,9 +51,18 @@ export function JournalEntry({ userId }: JournalEntryProps) {
 
         {/* Footer */}
         <CardFooter>
-          <Button onClick={handleSave}>Save Entry</Button>
+          {/* This will save our journal entry and make the textarea blank */}
+          <Button onClick={async () => { 
+            await saveJournalEntry(entry, userId); 
+            setEntry(""); 
+          }}> 
+            Save Entry
+          </Button>
         </CardFooter>
       </Card>
+
+      {/* This will output our journal entries */}
+      <JournalSwipe userId={userId} /> {/* Pass journal entries data to JournalSwipe */}
     </div>
   );
 }
