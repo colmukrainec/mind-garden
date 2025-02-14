@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProfileDropdown } from "@/components/profile-dropdown";
+import { JournalButton } from "@/components/journal-button";
 import Footer from "@/components/footer";
 
 export default async function ProfilePage() {
@@ -42,6 +43,8 @@ export default async function ProfilePage() {
                         <p className="text-2xl font-semibold text-green-700">Mind Garden</p>
                     </div>
                     <div className="flex items-center gap-4">
+                        {/* Button to go into journal page */}
+                        <JournalButton />
                         <Button variant="ghost" size="icon">
                             <Bell className="h-5 w-5" />
                         </Button>
