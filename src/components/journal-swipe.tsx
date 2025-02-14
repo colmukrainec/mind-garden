@@ -36,7 +36,6 @@ function useJournalEntries(userId: string) {
     setIsLoading(true);
 
     try {
-      console.log("currentPage",currentEntryId)
       const { data, error } = await selectJournalEntries(userId, currentEntryId);
 
       if (error) throw error;

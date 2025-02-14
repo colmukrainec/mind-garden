@@ -65,6 +65,16 @@ export async function selectData<T>(table: string, conditions?: object, columns:
   return { data };
 }
 
+/**
+ * Selects data from a given Supabase table with pagination support
+ * @param table - The name of the table
+ * @param conditions - The conditions for filtering data (optional)
+ * @param columns - The columns to select (optional, defaults to all columns)
+ * @param lastEntryId - The ID of the last fetched entry for pagination
+ * @param rangeEnd - The number of entries to fetch
+ * @returns - The selected data or error
+ * This will be the function for all our select operations with pagination 
+ */
 export async function selectDataLazy<T>(
   table: string,
   conditions?: object,
@@ -81,9 +91,7 @@ export async function selectDataLazy<T>(
 
   // If lastEntryId is provided, we'll fetch entries that come after this ID
   if (lastEntryId) {
-    console.log('lastEntryId:', lastEntryId);
     query = query.gt('id', lastEntryId);  // 'id' refers to the journal entry ID
-    console.log('query with lastEntryId:', query);
   }
 
   // Apply pagination using limit and ordering by id in ascending order
