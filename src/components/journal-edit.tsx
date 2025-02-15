@@ -1,22 +1,20 @@
 "use client";
 
-//Core imports
+// Core imports
 import { useState } from "react";
 
-//UI
-import {Card,CardContent,CardDescription,CardFooter,CardHeader,CardTitle} from "@/components/ui/card";
+// UI
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Brain, NotebookPen } from "lucide-react";
-import { saveJournalEntry } from "@/utils/supabase/dbfunctions";
+import { JournalEntry } from "@/components/journal-swipe"; // Import JournalEntry interface
+
+import { format } from 'date-fns';
 
 
-interface JournalEntryProps {
-  readonly userId: string;
-}
-
-export function JournalEntryCard({ userId }: JournalEntryProps) {
-  const [entry, setEntry] = useState(""); // State to store textarea input
+export function JournalEntryEditCard(item: JournalEntry) {
+  const [entry, setEntry] = useState(item.journal_text); // Pre-fill with existing text
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
@@ -24,11 +22,14 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
         {/* Header */}
         <CardHeader>
           <div className="flex items-center space-x-2">
-            <CardTitle>Journal Entry</CardTitle>
+            <CardTitle>Edit Journal Entry from </CardTitle>
             <NotebookPen className="h-6 w-6" />
+            <CardTitle className="text-lg font-semibold text-gray-800">
+                {format(new Date(item.entry_date), 'MMMM d, yyyy')}
+            </CardTitle>
           </div>
           <div className="flex items-center space-x-2">
-            <CardDescription>Journal your thoughts</CardDescription>
+            <CardDescription>Modify your thoughts</CardDescription>
             <Brain className="h-4 w-4" />
           </div>
         </CardHeader>
@@ -37,7 +38,7 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
         <CardContent className="space-y-10">
           <div className="space-y-2">
             <TextArea
-              placeholder="What's on your mind?"
+              placeholder="Edit your thoughts..."
               value={entry}
               onChange={(e) => setEntry(e.target.value)}
             />
@@ -46,12 +47,9 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
 
         {/* Footer */}
         <CardFooter>
-          {/* This will save our journal entry and make the textarea blank */}
-          <Button onClick={async () => { 
-            await saveJournalEntry(entry, userId); 
-            setEntry(""); 
-          }}> 
-            Save Entry
+          {/* Edit button (no functionality yet) */}
+          <Button variant="outline">
+            Edit Entry
           </Button>
         </CardFooter>
       </Card>

@@ -55,7 +55,7 @@ function SwiperUI<T extends {}>({
       
       {/* Show current entry position */}
       <div className="text-center mt-4 text-sm text-gray-600">
-        Entry {activeIndex + 1} of {data.length}
+        Journal Entry {activeIndex + 1} of {data.length}
       </div>
     </div>
   );

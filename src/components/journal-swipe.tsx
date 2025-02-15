@@ -1,18 +1,17 @@
+'use client'
 // Core imports
 import React, { useState, useEffect } from 'react';
 
-// Third party
-import { format } from 'date-fns';
-
 //UI
 import { selectJournalEntries } from '@/utils/supabase/dbfunctions';
+import renderSlide from '@/components/ui/render-slide';
 import SwiperUI from './ui/swiper';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 
 // Define our data structure for journal entries
-interface JournalEntry {
+export interface JournalEntry {
   id: string;
   user_id: string;
   journal_text: string;
@@ -96,23 +95,6 @@ export function JournalSwipe({ userId }: JournalSwipeProps) {
   // Use our custom hook to manage entries
   const { entries, isLoading, hasMore, fetchMoreEntries } = useJournalEntries(userId);
 
-  /**
-   * Renders individual journal entries with consistent styling
-   */
-  const renderSlide = (item: JournalEntry) => (
-    <>
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">
-          {format(new Date(item.entry_date), 'MMMM d, yyyy')}
-        </h3>
-        <div className="h-1 w-20 bg-blue-500 rounded mt-2"></div>
-      </div>
-      <p className="text-gray-700 leading-relaxed flex-grow">
-        {item.journal_text}
-      </p>
-    </>
-  );
-
   return (
     <div>
       <SwiperUI 
@@ -124,7 +106,7 @@ export function JournalSwipe({ userId }: JournalSwipeProps) {
           }
         }}
       />
-      {/* Loading indicator */}
+      {/* Loading indicator Replace with COLMS at some point*/}
       {isLoading && (
         <div className="text-center py-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>

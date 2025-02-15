@@ -6,7 +6,6 @@ import { Bell } from "lucide-react";
 
 // Utility
 import { createClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
 
 // UI
 import { Particles } from "@/components/magicui/particles";
@@ -15,6 +14,8 @@ import { ProfileDropdown } from '@/components/profile-dropdown';
 import { JournalButton } from '@/components/journal-button';
 import { JournalEntryCard } from '@/components/journal-entry';
 import Footer from '@/components/footer';
+import { JournalSwipe } from "@/components/journal-swipe";
+
 
 export default async function JournalPage() {
   const supabase = await createClient()
@@ -79,6 +80,13 @@ export default async function JournalPage() {
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <JournalEntryCard userId={userId}/>
+
+        ,<div className= "mb">
+            {/* This will output our journal entries */}
+            <JournalSwipe userId={userId} /> {/* Pass journal entries data to JournalSwipe */}            
+        </div>
+
+
 
       </main>
 
