@@ -13,7 +13,7 @@ import {
   BookOpenText,
   BookType,
   BriefcaseBusiness,
-  BriefcaseMedical,
+  BriefcaseMedical, Brush,
   Cake,
   CalendarHeart,
   Cigarette,
@@ -143,7 +143,7 @@ const AttributeIcon: React.FC<AttributeIconProps> = ({
       'hair': Scissors,
       'nails': null, // No suitable icon
       'skincare': null, // No suitable icon
-      'makeup': null, // No suitable icon
+      'makeup': Brush,
     },
     'chores': {
       'cleaning': null, // No suitable icon

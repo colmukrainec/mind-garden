@@ -28,10 +28,7 @@ export default async function PrivatePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{
-      backgroundImage: `url(/gradient.svg)`,
-      backgroundSize: "cover",
-    }}>
+    <div className="min-h-screen flex flex-col absolute inset-0 -z-10 animate-gradient bg-gradient">
 
       <Particles
         className="absolute inset-0 z-0"

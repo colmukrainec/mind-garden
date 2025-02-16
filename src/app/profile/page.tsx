@@ -26,13 +26,7 @@ export default async function ProfilePage() {
     }
 
     return (
-        <div
-            className="min-h-screen flex flex-col"
-            style={{
-                backgroundImage: "url(/gradient.svg)",
-                backgroundSize: "cover",
-            }}
-        >
+        <div className="min-h-screen flex flex-col absolute inset-0 -z-10 animate-gradient bg-gradient">
             <Particles className="absolute inset-0 z-0" quantity={200} ease={80} color={"#000000"} refresh />
 
             <header className="border-b bg-white/50 backdrop-blur-sm mt-4 mx-4 rounded-full">

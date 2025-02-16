@@ -61,7 +61,7 @@ const DataIntakeForm: React.FC = () => {
       } else {
         next.add(attributeId);
       }
-      return next;
+      return new Set(next);
     });
   }, []);
 
