@@ -41,12 +41,6 @@ export async function saveJournalEntry(entry: string, userId: string) {
  * @param columns - The columns to select (optional, defaults to all columns)
  * @returns - The selected data or error
  * This will be a general function for all our select operations (private to this script)
- * 
- * example: select from journal_entries where user_id = userId
- *    selectData('journal_entries', { user_id: userId });
- * 
- * example: select certain columns from journal entry
- *    selectData('journal_entries', {}, ['id', 'journal_text', 'created_at']);
  */
 export async function selectData<T>(table: string, conditions?: object, columns: string[] = ['*']) {
   const supabase = createClient();
@@ -55,7 +49,7 @@ export async function selectData<T>(table: string, conditions?: object, columns:
   const { data, error } = await supabase
     .from(table)
     .select(columns.join(', '))  // Use columns passed or default to '*'
-    .match(conditions || {});    // Use conditions (if any)
+    .match(conditions ?? {});    // Use conditions (if any)
 
   if (error) {
     console.error(`Error selecting from ${table}:`, error.message);
@@ -75,13 +69,7 @@ export async function selectData<T>(table: string, conditions?: object, columns:
  * @returns - The selected data or error
  * This will be the function for all our select operations with pagination 
  */
-export async function selectDataLazy<T>(
-  table: string,
-  conditions?: object,
-  columns: string[] = ['*'],
-  lastEntryId: string | null = null,  // Last entry ID for pagination
-  rangeEnd: number = 5
-) {
+export async function selectDataLazy<T>(table: string,conditions?: object, columns: string[] = ['*'], lastRetrievedId: string | null = null, rangeEnd: number = 5) {
   const supabase = createClient();
   let query = supabase.from(table).select(columns.join(', '));
 
@@ -89,13 +77,13 @@ export async function selectDataLazy<T>(
     query = query.match(conditions);
   }
 
-  // If lastEntryId is provided, we'll fetch entries that come after this ID
-  if (lastEntryId) {
-    query = query.gt('id', lastEntryId);  // 'id' refers to the journal entry ID
+  // If lastEntryId is provided, we'll fetch entries that come after this ID 
+  if (lastRetrievedId) {
+    query = query.gt('id', lastRetrievedId);
   }
 
   // Apply pagination using limit and ordering by id in ascending order
-  query = query.order('id', { ascending: true }).limit(rangeEnd);  // Always fetch next `rangeEnd` entries
+  query = query.order('id', { ascending: true }).limit(rangeEnd);
 
   const { data, error } = await query;
 
@@ -118,9 +106,42 @@ export async function selectJournalEntries(userId: string, lastEntryId: string |
   const { data, error } = await selectDataLazy('journal_entries', { user_id: userId }, columns, lastEntryId);
 
   if (error) {
-    console.error(`Error fetching journal entries for user ${userId}:`, error);
+    console.error("Error fetching journal entries:", error.message);
     return { error: error.message };
   }
 
   return { data };
+}
+
+/** 
+ * Updates data in a given Supabase table
+ * @param table - The name of the table
+ * @param conditions - The conditions for filtering data
+ * @param dataToUpdate - The data to update
+ * @returns - Success response or error
+ * This will be a general function for all our update operations (private to this script)
+ */
+
+export async function updateData<T>(table: string, conditions: object, dataToUpdate: T){
+  const supabase = createClient();
+  const { data, error } = await supabase.from(table).update(dataToUpdate).match(conditions).select();
+
+  if (error) {
+    console.error(`Error updating ${table}:`, error.message);
+    return { error };
+  } else{
+    return {data};
+  }
+}
+
+/**
+ * Updates a journal entry in the database
+ * @param entryId - The ID of the journal entry to update
+ * @param newEntry - The new journal entry text
+ * @returns - Success response or error
+ */
+export async function updateJournalEntry(entryId: string, newEntry: string) {
+  if (!newEntry.trim()) return; // Prevent empty entries
+
+  return await updateData('journal_entries', { id: entryId }, { journal_text: newEntry });
 }
