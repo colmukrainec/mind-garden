@@ -28,6 +28,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-swipe": "^6.0.4",
+    "react-toastify": "^11.0.3",
     "swipe-js-iso": "^2.1.5",
     "swiper": "^11.2.3",
     "tailwind-merge": "^3.0.1",
