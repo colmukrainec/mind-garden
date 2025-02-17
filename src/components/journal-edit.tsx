@@ -9,12 +9,37 @@ import { TextArea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Brain, NotebookPen } from "lucide-react";
 import { JournalEntry } from "@/components/journal-swipe"; // Import JournalEntry interface
+import { format } from "date-fns";
 
-import { format } from 'date-fns';
+// Import our database function
+import { updateJournalEntry } from "@/utils/supabase/dbfunctions";
 
+// Import toast for popups
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
-export function JournalEntryEditCard(item: JournalEntry) {
+export function JournalEntryEditCard(item: Readonly<JournalEntry>) {
   const [entry, setEntry] = useState(item.journal_text); // Pre-fill with existing text
+  const [isUpdating, setIsUpdating] = useState(false); // Loading state
+
+  const handleUpdate = async () => {
+    if (!entry.trim()) {
+      toast.warn("Entry cannot be empty!"); // Warn if empty
+      return;
+    }
+
+    setIsUpdating(true); // Show loading state
+
+    const result = await updateJournalEntry(item.id, entry);
+
+    setIsUpdating(false);
+
+    if (result?.error) {
+      toast.error("Failed to update journal entry.");
+    } else {
+      toast.success("Journal entry updated successfully!");
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
@@ -25,7 +50,7 @@ export function JournalEntryEditCard(item: JournalEntry) {
             <CardTitle>Edit Journal Entry from </CardTitle>
             <NotebookPen className="h-6 w-6" />
             <CardTitle className="text-lg font-semibold text-gray-800">
-                {format(new Date(item.entry_date), 'MMMM d, yyyy')}
+              {format(new Date(item.entry_date), "MMMM d, yyyy")}
             </CardTitle>
           </div>
           <div className="flex items-center space-x-2">
@@ -47,9 +72,9 @@ export function JournalEntryEditCard(item: JournalEntry) {
 
         {/* Footer */}
         <CardFooter>
-          {/* Edit button (no functionality yet) */}
-          <Button variant="outline">
-            Edit Entry
+          {/* Update button */}
+          <Button onClick={handleUpdate} disabled={isUpdating}>
+            {isUpdating ? "Updating..." : "Update Entry"}
           </Button>
         </CardFooter>
       </Card>
