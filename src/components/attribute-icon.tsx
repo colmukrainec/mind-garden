@@ -67,24 +67,24 @@ import {
   Trophy,
   Tv,
   Users,
-  Utensils,
+  Utensils, WashingMachine,
   Weight,
   Wind,
   Wine,
   X
 } from "lucide-react";
+import {BowlSteam, Broom, Hand, HandSoap, SmileyNervous} from "@phosphor-icons/react";
 
 interface AttributeIconProps {
   category: string
   attribute: string
 }
 
-// TODO: Find suitable icons for the null valued attributes
 const AttributeIcon: React.FC<AttributeIconProps> = ({
   category, attribute
 }) => {
   const DEFAULT_ICON = X;
-  const iconMap: Record<string, Record<string, LucideIcon | null>> = {
+  const ICON_MAP: Record<string, Record<string, LucideIcon | null>> = {
     'other': {
       'alcohol': Wine,
       'smoking': Cigarette,
@@ -117,7 +117,7 @@ const AttributeIcon: React.FC<AttributeIconProps> = ({
       'refreshed': BatteryCharging,
       'depressed': CloudFog,
       'lonely': Leaf,
-      'anxious': null, // Could not find a suitable icon
+      'anxious': SmileyNervous,
       'sad': Frown,
       'angry': Angry,
       'pressured': Weight,
@@ -141,15 +141,15 @@ const AttributeIcon: React.FC<AttributeIconProps> = ({
     },
     'beauty': {
       'hair': Scissors,
-      'nails': null, // No suitable icon
-      'skincare': null, // No suitable icon
+      'nails': Hand,
+      'skincare': HandSoap,
       'makeup': Brush,
     },
     'chores': {
-      'cleaning': null, // No suitable icon
+      'cleaning': Broom,
       'cooking': CookingPot,
-      'laundry': null, // No suitable icon
-      'dishes': null, // No suitable icon
+      'laundry': WashingMachine,
+      'dishes': BowlSteam,
     },
     'people': {
       'friends': Users,
@@ -188,7 +188,7 @@ const AttributeIcon: React.FC<AttributeIconProps> = ({
     },
   }
 
-  const IconComponent = iconMap[category]?.[attribute] ?? DEFAULT_ICON
+  const IconComponent = ICON_MAP[category]?.[attribute] ?? DEFAULT_ICON
 
   return <IconComponent className='w-5 h-5 inline-block mr-1'/>
 }

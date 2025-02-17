@@ -1,12 +1,12 @@
 import { redirect } from 'next/navigation'
 import { Bell } from "lucide-react"
-
 import { createClient } from '@/utils/supabase/server'
 import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import Footer from '@/components/footer'
 import DataIntakeForm from "@/components/data-intake-form";
+import {selectAllFromAttributes, selectAllFromCategories} from "@/actions/form-data";
 
 export default async function PrivatePage() {
   const supabase = await createClient()
@@ -23,12 +23,20 @@ export default async function PrivatePage() {
     .eq('id', userId)
     .single()
 
+  const categories = await selectAllFromCategories()
+  const attributes = await selectAllFromAttributes()
+
+  if (!categories || !attributes) {
+    console.error("Failed to fetch categories or attributes.")
+    redirect("/error")
+  }
+
   if (profileError) {
     redirect('/error')
   }
 
   return (
-    <div className="min-h-screen flex flex-col absolute inset-0 -z-10 animate-gradient bg-gradient">
+    <div className="min-h-screen flex flex-col inset-0 z-0 bg-gradient animate-gradient">
 
       <Particles
         className="absolute inset-0 z-0"
@@ -59,7 +67,7 @@ export default async function PrivatePage() {
       </header>
 
       <main className="flex-1 container mx-auto px-4 py-8">
-        <DataIntakeForm />
+        <DataIntakeForm userId={userId} categories={categories} attributes={attributes}/>
       </main>
 
       <Footer />
