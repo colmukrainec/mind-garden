@@ -3,13 +3,11 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-import { createClient } from '../../utils/supabase/server'
+import { createClient } from '../utils/supabase/server'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
@@ -28,8 +26,13 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
   const supabase = await createClient()
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  // Validate name fields
+  const firstNameError = validateName(formData.get('firstName'), 'First name');
+  if (firstNameError) return firstNameError;
+  
+  const lastNameError = validateName(formData.get('lastName'), 'Last name');
+  if (lastNameError) return lastNameError;
+
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
@@ -77,3 +80,9 @@ export async function deleteAccount(userId: string) {
   revalidatePath('/', 'layout')
   redirect('/')
 }
+
+const validateName = (name: FormDataEntryValue | null, field: string) => {
+  if (!name) return { error: `${field} is required` };
+  if (typeof name !== 'string') return { error: `${field} must be a string` };
+  if (name.length < 2) return { error: `${field} must be at least 2 characters long` };
+};
