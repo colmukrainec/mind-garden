@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/server'
 import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
 import { ProfileDropdown } from '@/components/profile-dropdown';
+import { JournalButton } from '@/components/journal-button';
 import Footer from '@/components/footer'
 
 export default async function PrivatePage() {
@@ -55,6 +56,10 @@ export default async function PrivatePage() {
           </div>
           <div className="flex items-center gap-4">
 
+
+
+            {/* Button to go into journal page */}
+            <JournalButton />
             {/* Notifications for next sprint not currently implemented */}
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
