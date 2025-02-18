@@ -32,7 +32,6 @@ export default function RootLayout({
         {/* Toast (Notification) position */}
         {children}
         <ToastContainer position="top-right" autoClose={3000} />
-        {children}
       </body>
     </html>
   );

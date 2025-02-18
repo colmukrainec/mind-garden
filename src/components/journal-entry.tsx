@@ -23,7 +23,6 @@ interface JournalEntryProps {
 
 export function JournalEntryCard({ userId }: JournalEntryProps) {
   const [entry, setEntry] = useState(""); // State to store textarea input
-  const [isUpdating, setIsUpdating] = useState(false)
 
   const handleInsert = async() => {
     //dont allow empty inserts
@@ -32,15 +31,9 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
       toast.warn("Journal Entry cannot be empty on inserts")
       return
     }
-
-    //set inserting true
-    setIsUpdating(true)
     
     // insert
     const result = await saveJournalEntry(entry, userId); setEntry("")
-
-    //set inserting false
-    setIsUpdating(false)
 
     //error checking
     if( result?.error || 
