@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
 import { ProfileDropdown } from '@/components/profile-dropdown';
+import { JournalButton } from '@/components/journal-button';
 import Footer from '@/components/footer'
 import DataIntakeForm from "@/components/data-intake-form";
 import {selectAllFromAttributes, selectAllFromCategories} from "@/actions/form-data";
@@ -39,6 +40,7 @@ export default async function PrivatePage() {
     <div className="min-h-screen flex flex-col inset-0 z-0 bg-gradient animate-gradient">
 
       <Particles
+        // Particles background
         className="absolute inset-0 z-0"
         quantity={200}
         ease={80}
@@ -57,6 +59,10 @@ export default async function PrivatePage() {
           </div>
           <div className="flex items-center gap-4">
 
+
+
+            {/* Button to go into journal page */}
+            <JournalButton />
             {/* Notifications for next sprint not currently implemented */}
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
