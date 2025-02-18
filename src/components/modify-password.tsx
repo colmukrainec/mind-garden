@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRef } from "react";
 import { modifyPassword } from "@/actions/auth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ModifyPassword() {
   const newPass = useRef<HTMLInputElement>(null)
@@ -13,10 +15,10 @@ export default function ModifyPassword() {
   const handleSubmit = () =>{
     if(confirmPass.current && newPass.current && confirmPass.current.value == newPass.current.value){
       modifyPassword(newPass.current.value)
-      alert("Password changed successfully!")
+      toast.success("Password updated successfully!")
     }
     else if(confirmPass.current && newPass.current && confirmPass.current.value != newPass.current.value){
-      alert("Passwords do not match")
+      toast.warn("Passwords do not match")
     }
   }
   return (

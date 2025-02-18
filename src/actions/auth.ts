@@ -81,13 +81,8 @@ export async function deleteAccount(userId: string) {
   redirect('/')
 }
 
-export async function modifyAccount(firstName:string, lastName: string, email: string){
+export async function modifyAccount(firstName:string, lastName: string, email: string, userId: string){
   const supabase = await createClient()
-
-  const { data: authData, error: authError } = await supabase.auth.getUser()
-  if (authError || !authData?.user) {
-      redirect('/error')
-  }
 
   const firstNameError = validateName(firstName, 'First name');
   if (firstNameError) return firstNameError;
@@ -101,9 +96,9 @@ export async function modifyAccount(firstName:string, lastName: string, email: s
     last_name: lastName,
   }
 
-  const { error: updateError } = await supabase.from('users').update(dataIn).eq('id', authData.user.id)
+  const { error: updateError } = await supabase.from('users').update(dataIn).eq('id', userId)
     
-  const { data, error } = await supabase.auth.admin.updateUserById(authData.user.id, {
+  const { error } = await supabase.auth.admin.updateUserById(userId, {
     email: email,
     user_metadata: {
         display_name: `${firstName} ${lastName}`

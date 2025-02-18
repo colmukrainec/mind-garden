@@ -5,18 +5,21 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { modifyAccount } from "@/actions/auth";
 import { useRef } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function ModifyAccount(props: { profileData: any }) {
+
+export default function ModifyAccount(props: { profileData: any, userId: string }) {
 
     const emailRef = useRef<HTMLInputElement>(null); 
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       // Check if the ref is not null before using it
       if (firstNameRef.current && lastNameRef.current && emailRef.current) {
-        modifyAccount(firstNameRef.current.value, lastNameRef.current.value, emailRef.current.value)
-        alert("Profile is updated!")
+        await modifyAccount(firstNameRef.current.value, lastNameRef.current.value, emailRef.current.value, props.userId)
+        toast.success("Profile updated successfully!")
       }
     };
 

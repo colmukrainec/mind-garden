@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import Footer from "@/components/footer";
-import ModifyAccount from "@/components/ModifyAccount";
-import ModifyPassword from "@/components/ModifyPassword";
+import ModifyAccount from "@/components/modify-account-info";
+import ModifyPassword from "@/components/modify-password";
+import { ToastContainer } from "react-toastify";
 
 export default async function ProfilePage() {
     const supabase = await createClient()
@@ -39,7 +40,7 @@ export default async function ProfilePage() {
             }}
         >
             <Particles className="absolute inset-0 z-0" quantity={200} ease={80} color={"#000000"} refresh />
-
+            <ToastContainer/>
             <header className="border-b bg-white/50 backdrop-blur-sm mt-4 mx-4 rounded-full">
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                     <div className="flex items-center">
@@ -57,7 +58,7 @@ export default async function ProfilePage() {
 
             <main className="flex-1 container mx-auto px-4 py-8">
                 <div className="max-w-2xl mx-auto space-y-8">
-                    <ModifyAccount profileData={profileData} />
+                    <ModifyAccount profileData={profileData} userId={userId} />
 
                     <ModifyPassword />
 
