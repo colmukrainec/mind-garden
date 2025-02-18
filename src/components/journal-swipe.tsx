@@ -2,6 +2,9 @@
 // Core imports
 import React, { useState, useEffect } from 'react';
 
+// Third party
+import { LoaderCircle } from 'lucide-react';
+
 // Utility
 import { selectJournalEntries } from '@/utils/supabase/dbfunctions';
 
@@ -29,7 +32,7 @@ function useJournalEntries(userId: string) {
   const [currentEntryId, setCurrentEntryId] = useState("");
   const [isLoading, setIsLoading] = useState(false); // used to prevent multiple fetches
   const [hasMore, setHasMore] = useState(true); // used to determine if there are more entries to fetch
-  const ENTRIES_PER_PAGE = 5; 
+  const ENTRIES_PER_PAGE = 5;
 
 
   const fetchMoreEntries = async () => {
@@ -48,7 +51,7 @@ function useJournalEntries(userId: string) {
           const newEntries = data as unknown as JournalEntry[];
           const existingIds = new Set(prev.map(entry => entry.id));
           const uniqueNewEntries = newEntries.filter(entry => !existingIds.has(entry.id));
-          
+
           //set the last retrieved entry ID
           const lastEntry = data[data.length - 1] as unknown as JournalEntry;
           if (lastEntry?.id) {
@@ -57,8 +60,8 @@ function useJournalEntries(userId: string) {
           //check if there more entries to fetch
           setHasMore(data.length >= ENTRIES_PER_PAGE);
           return [...prev, ...uniqueNewEntries];
-          
-        }); 
+
+        });
       }
     } catch (error) {
       console.error('Error fetching journal entries:', error);
@@ -98,9 +101,9 @@ export function JournalSwipe({ userId }: JournalSwipeProps) {
   const { entries, isLoading, hasMore, fetchMoreEntries } = useJournalEntries(userId);
 
   return (
-    <div>
-      <SwiperUI 
-        data={entries} 
+    <div className="container flex flex-col items-center justify-center pt-5">
+      <SwiperUI
+        data={entries}
         renderSlide={renderSlide}
         onReachEnd={() => {
           if (hasMore) {
@@ -108,11 +111,10 @@ export function JournalSwipe({ userId }: JournalSwipeProps) {
           }
         }}
       />
-      {/* Loading indicator Replace with COLMS at some point*/}
+
+      {/* Loader appears BELOW SwiperUI */}
       {isLoading && (
-        <div className="text-center py-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-        </div>
+        <LoaderCircle className="h-5 w-5 animate-spin mt-4" />
       )}
     </div>
   );
