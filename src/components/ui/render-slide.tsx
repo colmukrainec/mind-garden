@@ -1,4 +1,6 @@
+"use client"
 
+// UI components
 import { JournalEntry } from "@/components/journal-swipe";
 import { JournalEntryEditCard } from '../journal-edit';
 

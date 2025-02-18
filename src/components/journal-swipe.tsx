@@ -2,8 +2,10 @@
 // Core imports
 import React, { useState, useEffect } from 'react';
 
-//UI
+// Utility
 import { selectJournalEntries } from '@/utils/supabase/dbfunctions';
+
+//UI
 import renderSlide from '@/components/ui/render-slide';
 import SwiperUI from './ui/swiper';
 import 'swiper/css';
@@ -25,8 +27,8 @@ export interface JournalEntry {
 function useJournalEntries(userId: string) {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [currentEntryId, setCurrentEntryId] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // used to prevent multiple fetches
+  const [hasMore, setHasMore] = useState(true); // used to determine if there are more entries to fetch
   const ENTRIES_PER_PAGE = 5; 
 
 

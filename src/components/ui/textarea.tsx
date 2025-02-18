@@ -1,7 +1,9 @@
-"use client" // Ensures this component is a Client Component in Next.js
-
+"use client" 
+// Core Imports
 import React, { useRef, useEffect } from "react";
-import { cn } from "@/lib/utils"; // Utility function to conditionally join class names
+
+// Utility Imports
+import { cn } from "@/lib/utils"; 
 
 // Define the props interface, extending standard <textarea> attributes
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
@@ -9,24 +11,25 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 // Forward ref to allow parent components to reference the textarea element
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, ...props }, ref) => {
+
     // Create a reference to the textarea element
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     useEffect(() => {
-      const textarea = textareaRef.current; // Get the textarea element reference
+      const textarea = textareaRef.current; 
       if (!textarea) return;
 
+      // Set Height based on the text content
       const adjustHeight = () => {
-        textarea.style.height = "auto"; // Reset height to auto before measuring
-        textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on content
+        textarea.style.height = "auto"; 
+        textarea.style.height = `${textarea.scrollHeight}px`; 
       };
 
-      adjustHeight(); // Adjust height on mount to fit pre-filled content
-
-      // Add event listener for 'input' event to adjust height dynamically
+      // Listen for input changes to adjust height
+      adjustHeight(); 
       textarea.addEventListener("input", adjustHeight);
 
-      // Cleanup: Remove event listener when component unmounts
+      // Remove event listener when component unmounts
       return () => textarea.removeEventListener("input", adjustHeight);
     }, []); // Runs once when component mounts
 

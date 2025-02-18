@@ -29,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Toast (Notification) position */}
         {children}
         <ToastContainer position="top-right" autoClose={3000} />
         {children}

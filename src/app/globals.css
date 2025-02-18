@@ -73,7 +73,9 @@ body {
 
 .journal-swiper {
   position: relative;
+  width: 100%;
   height: 100%;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0);
 }
 
 .journal-swiper .swiper-button-next,
@@ -90,7 +92,7 @@ body {
 .journal-swiper .swiper-button-next:hover,
 .journal-swiper .swiper-button-prev:hover {
   background: #f8fafc;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0,0,0,1);
 }
 
 .journal-swiper .swiper-button-next::after,

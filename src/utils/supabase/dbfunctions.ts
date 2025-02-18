@@ -67,7 +67,7 @@ export async function selectData<T>(table: string, conditions?: object, columns:
  * @param lastEntryId - The ID of the last fetched entry for pagination
  * @param rangeEnd - The number of entries to fetch
  * @returns - The selected data or error
- * This will be the function for all our select operations with pagination 
+ * This will be the function for all our select operations with pagination (private to this script)
  */
 export async function selectDataLazy<T>(table: string,conditions?: object, columns: string[] = ['*'], lastRetrievedId: string | null = null, rangeEnd: number = 5) {
   const supabase = createClient();

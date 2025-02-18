@@ -1,7 +1,12 @@
 "use client"; 
 
+// Core imports
 import { useRouter } from 'next/navigation'
+
+// Third party
 import { NotebookPen } from "lucide-react"
+
+// UI
 import { Button } from "@/components/ui/button";
 
 export function JournalButton() {

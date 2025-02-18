@@ -1,7 +1,7 @@
-//Core Imports  
+// Core Imports  
 import { redirect } from 'next/navigation';
 
-// Third-Party Library Imports  
+// Third-Party 
 import { Bell } from "lucide-react";
 
 // Utility
@@ -16,35 +16,35 @@ import { JournalEntryCard } from '@/components/journal-entry';
 import Footer from '@/components/footer';
 import { JournalSwipe } from "@/components/journal-swipe";
 
-
 export default async function JournalPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const { data: authData, error: authError } = await supabase.auth.getUser()
+  const { data: authData, error: authError } = await supabase.auth.getUser();
   if (authError || !authData?.user) {
-    redirect('/error')
+    redirect('/error');
   }
 
-  const userId = authData.user.id
-  const { data: profileData, error: profileError } = await supabase.from('users').select('*').eq('id', userId).single()
+  const userId = authData.user.id;
+  const { data: profileData, error: profileError } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', userId)
+    .single();
 
   if (profileError) {
-    redirect('/error')
+    redirect('/error');
   }
-
-
 
   return (
     <div
-      className="min-h-screen flex flex-col" 
-      // Gradient background
+      className="min-h-screen flex flex-col"
       style={{
-      backgroundImage: `url(/gradient.svg)`,
-      backgroundSize: "cover",
-      }}>
-      
+        backgroundImage: `url(/gradient.svg)`,
+        backgroundSize: "cover",
+      }}
+    >
+      {/* Particles Background */}
       <Particles
-        // Particles background
         className="absolute inset-0 z-0"
         quantity={200}
         ease={80}
@@ -52,45 +52,38 @@ export default async function JournalPage() {
         refresh
       />
 
+      {/* Header */}
       <header className="border-b bg-white/50 backdrop-blur-sm mt-4 mx-4 rounded-full">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <img src="/logo.png" alt="Mind Garden Logo" className="h-7 w-7 mr-2" />
-            <p className="text-2xl font-semibold text-green-700">
-              Mind Garden
-            </p>
+            <p className="text-2xl font-semibold text-green-700">Mind Garden</p>
           </div>
           <div className="flex items-center gap-4">
-
-
-
-            {/* Button to go into journal page */}
+            {/* Journal Button */}
             <JournalButton />
-            {/* Notifications for next sprint not currently implemented */}
+            {/* Notifications */}
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
             </Button>
+            {/* Profile Dropdown */}
             <ProfileDropdown />
           </div>
         </div>
       </header>
 
-
-
+      {/* Main Content */}
       <main className="flex-1 container mx-auto px-4 py-8">
-        <JournalEntryCard userId={userId}/>
-
-        ,<div className= "mb">
-            {/* This will output our journal entries */}
-            <JournalSwipe userId={userId} /> {/* Pass journal entries data to JournalSwipe */}            
+        <JournalEntryCard userId={userId} />
+        <div className="mb-8">
+          {/* Journal Entries */}
+          <JournalSwipe userId={userId} />
         </div>
-
-
-
       </main>
 
+      {/* Footer */}
       <Footer />
     </div>
-  )
+  );
 }

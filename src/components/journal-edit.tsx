@@ -3,6 +3,13 @@
 // Core imports
 import { useState } from "react";
 
+// Third Party
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
+
+// Utility
+import { updateJournalEntry } from "@/utils/supabase/dbfunctions";
+
 // UI
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
@@ -11,24 +18,20 @@ import { Brain, NotebookPen } from "lucide-react";
 import { JournalEntry } from "@/components/journal-swipe"; // Import JournalEntry interface
 import { format } from "date-fns";
 
-// Import our database function
-import { updateJournalEntry } from "@/utils/supabase/dbfunctions";
-
-// Import toast for popups
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; 
 
 export function JournalEntryEditCard(item: Readonly<JournalEntry>) {
   const [entry, setEntry] = useState(item.journal_text); // Pre-fill with existing text
   const [isUpdating, setIsUpdating] = useState(false); // Loading state
 
+  // handles the update journal entry functionality
   const handleUpdate = async () => {
+    // dont allow empty entries
     if (!entry.trim()) {
-      toast.warn("Entry cannot be empty!"); // Warn if empty
+      toast.warn("Entry cannot be empty!"); 
       return;
     }
 
-    setIsUpdating(true); // Show loading state
+    setIsUpdating(true); 
 
     const result = await updateJournalEntry(item.id, entry);
 
@@ -46,6 +49,7 @@ export function JournalEntryEditCard(item: Readonly<JournalEntry>) {
       <Card className="bg-white/50 backdrop-blur-sm rounded-2xl">
         {/* Header */}
         <CardHeader>
+          {/* Title and icon */}
           <div className="flex items-center space-x-2">
             <CardTitle>Edit Journal Entry from </CardTitle>
             <NotebookPen className="h-6 w-6" />
@@ -53,6 +57,7 @@ export function JournalEntryEditCard(item: Readonly<JournalEntry>) {
               {format(new Date(item.entry_date), "MMMM d, yyyy")}
             </CardTitle>
           </div>
+          {/* Description and icon */}
           <div className="flex items-center space-x-2">
             <CardDescription>Modify your thoughts</CardDescription>
             <Brain className="h-4 w-4" />

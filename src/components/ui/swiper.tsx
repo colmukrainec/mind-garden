@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, EffectFade } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-fade';
-import 'swiper/css/navigation';
+// Core imports
+import React, { useState } from "react";
 
-/**
- * Generic Swiper UI component that can handle any type of data
- * Provides consistent styling and behavior for swipeable content
- */
+// UI
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+
 interface SwiperUIProps<T> {
   data: T[];
   renderSlide: (item: T) => React.ReactNode;
   onReachEnd?: () => void;
 }
 
-function SwiperUI<T extends {}>({ 
-  data, 
+function SwiperUI<T extends {}>({
+  data,
   renderSlide,
-  onReachEnd 
+  onReachEnd,
 }: Readonly<SwiperUIProps<T>>) {
+  
   // Track current slide for pagination display
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -35,24 +35,24 @@ function SwiperUI<T extends {}>({
         loop={false}
         className="journal-swiper"
         onSlideChange={(swiper) => {
-            setActiveIndex(swiper.activeIndex);
-            // Only trigger when we're very close to the end
-            if (swiper.isEnd && swiper.activeIndex === data.length - 1) {
-              onReachEnd?.();
-            }
-          }}
+          setActiveIndex(swiper.activeIndex);
+          // Only trigger when on the last slide
+          if (swiper.isEnd && swiper.activeIndex === data.length - 1) {
+            onReachEnd?.();
+          }
+        }}
       >
         {data.map((item, index) => (
           <SwiperSlide key={index}>
-            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg 
-                          transition-all duration-300 hover:shadow-xl
-                          min-h-[300px] flex flex-col">
+            <div
+              className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl min-h-[300px] flex flex-col"
+            >
               {renderSlide(item)}
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
-      
+
       {/* Show current entry position */}
       <div className="text-center mt-4 text-sm text-gray-600">
         Journal Entry {activeIndex + 1} of {data.length}
