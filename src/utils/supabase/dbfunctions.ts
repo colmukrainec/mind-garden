@@ -145,3 +145,9 @@ export async function updateJournalEntry(entryId: string, newEntry: string) {
 
   return await updateData('journal_entries', { id: entryId }, { journal_text: newEntry });
 }
+
+export async function deleteJournalEntry(entryId: string) {
+  const supabase = createClient();
+  
+  return await supabase.from('journal_entries').delete().eq('id', entryId)
+}
