@@ -5,6 +5,8 @@ import { useState } from "react";
 
 // Third party imports
 import { Brain, NotebookPen } from "lucide-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 // Utility
 import { saveJournalEntry } from "@/utils/supabase/dbfunctions";
@@ -21,6 +23,36 @@ interface JournalEntryProps {
 
 export function JournalEntryCard({ userId }: JournalEntryProps) {
   const [entry, setEntry] = useState(""); // State to store textarea input
+  const [isUpdating, setIsUpdating] = useState(false)
+
+  const handleInsert = async() => {
+    //dont allow empty inserts
+    if(!entry.trim())
+    {
+      toast.warn("Journal Entry cannot be empty on inserts")
+      return
+    }
+
+    //set inserting true
+    setIsUpdating(true)
+    
+    // insert
+    const result = await saveJournalEntry(entry, userId); setEntry("")
+
+    //set inserting false
+    setIsUpdating(false)
+
+    //error checking
+    if( result?.error || 
+      (!result?.error && !result?.data)) // need this logic incase supabase silent fails
+    {
+      toast.warn("Error during Journal Entry")      
+    } else
+    {
+      toast.success("Successfully inserted Journal Entry")
+    }
+
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
@@ -53,7 +85,7 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
         {/* Footer */}
         <CardFooter>
           {/* This will save our journal entry and make the textarea blank */}
-          <Button onClick={async () => { await saveJournalEntry(entry, userId); setEntry(""); }}> 
+          <Button onClick={handleInsert}> 
             Save Entry
           </Button>
         </CardFooter>
