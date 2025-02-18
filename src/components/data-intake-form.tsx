@@ -34,10 +34,10 @@ function DataIntakeForm({ userId, categories, attributes }: DataIntakeFormProps)
         const responses = await selectResponsesByDate(userId, new Date().toISOString().split("T")[0]);
 
         if (mounted) {
-          setCurrentResponses(new Set(responses.map((response: IResponses) => response.attribute_id)));
-          setCurrentSelection(new Set(responses.map((response: IResponses) => response.attribute_id)));
+          setCurrentResponses(new Set(responses?.map((response: IResponses) => response.attribute_id)));
+          setCurrentSelection(new Set(responses?.map((response: IResponses) => response.attribute_id)));
           setLoadingResponses(false);
-          if (responses.length > 0) setCompletedForm(true);
+          if (responses && responses.length > 0) setCompletedForm(true);
         }
       } catch (err) {
         console.error("Error fetching table data:", err);
