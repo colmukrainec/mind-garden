@@ -81,6 +81,50 @@ export async function deleteAccount(userId: string) {
   redirect('/')
 }
 
+export async function modifyAccount(firstName:string, lastName: string, email: string){
+  const supabase = await createClient()
+
+  const { data: authData, error: authError } = await supabase.auth.getUser()
+  if (authError || !authData?.user) {
+      redirect('/error')
+  }
+
+  const firstNameError = validateName(firstName, 'First name');
+  if (firstNameError) return firstNameError;
+  
+  const lastNameError = validateName(lastName, 'Last name');
+  if (lastNameError) return lastNameError;
+
+  const dataIn = {
+    email: email,
+    first_name: firstName,
+    last_name: lastName,
+  }
+
+  const { error: updateError } = await supabase.from('users').update(dataIn).eq('id', authData.user.id)
+    
+  const { data, error } = await supabase.auth.admin.updateUserById(authData.user.id, {
+    email: email,
+    user_metadata: {
+        display_name: `${firstName} ${lastName}`
+    }
+  });
+
+  if(error || updateError){
+    redirect('/error')
+  }
+}
+
+export async function modifyPassword(newPassword: string){
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword })
+
+  if(error){
+    redirect('/error')
+  }
+}
+
 const validateName = (name: FormDataEntryValue | null, field: string) => {
   if (!name) return { error: `${field} is required` };
   if (typeof name !== 'string') return { error: `${field} must be a string` };
