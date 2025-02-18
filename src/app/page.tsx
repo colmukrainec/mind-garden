@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
-import { Mail, Lock, User, CircleAlert } from "lucide-react"
+import { Mail, Lock, User, CircleAlert, LoaderCircle } from "lucide-react"
 import { Particles } from "@/components/magicui/particles";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import Footer from '@/components/footer';
@@ -14,6 +14,7 @@ import Footer from '@/components/footer';
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   /**
    * Handles authentication by calling the appropriate function
@@ -25,11 +26,12 @@ export default function Home() {
    * the authentication function
    */
   const handleAuth = async (formData: FormData) => {
-    const result = await (isLogin ? login(formData) : signup(formData));
-    if (result?.error) {
-      setError(result.error);
-    } else {
-      setError('');
+    setIsLoading(true);
+    try {
+      const { error } = await (isLogin ? login(formData) : signup(formData));
+      setError(error ?? '');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,10 +51,15 @@ export default function Home() {
         color={"#000000"}
         refresh
       />
+
+      {/* Title, logo and tagline */}
       <div className="text-center mb-12 relative">
-        <h1 className="text-7xl md:text-8xl font-bold bg-gradient-to-r from-green-400 to-blue-400 text-transparent bg-clip-text mb-4">
-          Mind Garden
-        </h1>
+        <div className=" flex items-center justify-center">
+          <img src="/logo.png" alt="Mind Garden Logo" className="h-20 w-20 mx-auto mb-4 mr-7" />
+          <h1 className="text-7xl md:text-8xl font-bold bg-gradient-to-r from-green-400 to-blue-400 text-transparent bg-clip-text mb-4">
+            Mind Garden
+          </h1>
+        </div>
         <div className="text-2xl text-gray-600 flex justify-left items-center">
           <span className="mr-2">Cultivate Your</span>
           <span className="text-4xl font-bold text-green-500 inline-flex items-center">
@@ -76,10 +83,17 @@ export default function Home() {
         </div>
       </div>
 
-
       <Card className="w-full max-w-2xl backdrop-blur-sm bg-white/50 shadow-xl border-0 rounded-2xl">
         <CardContent className="space-y-8 p-12">
-          <form action={handleAuth} className="space-y-8">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault(); // Prevent form from reloading the page
+              const formData = new FormData(e.currentTarget);
+              await handleAuth(formData);
+            }}
+            className="space-y-8"
+          >
+            {/* Error message */}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex items-center space-x-3">
                 <CircleAlert className="h-6 w-6 text-red-600" />
@@ -87,6 +101,7 @@ export default function Home() {
               </div>
             )}
 
+            {/* First and Last Name  for signup only*/}
             {!isLogin && (
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-3">
@@ -106,6 +121,7 @@ export default function Home() {
               </div>
             )}
 
+            {/* Email */}
             <div className="space-y-3">
               <Label htmlFor="email" className="text-base">Email</Label>
               <div className="relative">
@@ -121,6 +137,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Password */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-base">Password</Label>
@@ -143,13 +160,23 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Submit auth button for login or signup */}
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full h-12 text-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              {isLogin ? "Log in" : "Sign up"}
+              {isLoading ? (
+                <>
+                  <LoaderCircle className="h-5 w-5 animate-spin" />
+                  <span>{isLogin ? "Unlocking your garden.." : "Sprouting your account..."}</span>
+                </>
+              ) : (
+                <span>{isLogin ? "Log in" : "Sign up"}</span>
+              )}
             </Button>
 
+            {/* Toggle between login and signup */}
             <div className="text-center">
               <span className="text-base text-gray-600">{isLogin ? "Don't have an account?" : "Already have an account?"}</span>{" "}
               <button
@@ -160,6 +187,7 @@ export default function Home() {
                 {isLogin ? "Sign up" : "Log in"}
               </button>
             </div>
+
           </form>
         </CardContent>
       </Card>
