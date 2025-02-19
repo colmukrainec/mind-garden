@@ -8,17 +8,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}  # Use the PAT to push changes
 
       - uses: bahmutov/npm-install@v1
 
-      - run: npm run format  # Runs Prettier
+      - run: npm run format  # Run Prettier
 
-      - run: git config --global user.name "github-actions"
-      - run: git config --global user.email "github-actions@github.com"
-      - run: |
+      - run: git status  # Debug: Check if files were changed
+
+      - name: Commit and push if changes exist
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Apply Prettier formatting"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git diff --cached --quiet || (git commit -m "chore: format code with Prettier" && git push origin HEAD)
