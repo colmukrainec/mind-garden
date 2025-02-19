@@ -1,5 +1,6 @@
 import { createClient } from "./client";
 
+const MAX = 11;
 /**
  * Inserts data into a given Supabase table
  * @param table - The name of the table
@@ -144,4 +145,14 @@ export async function updateJournalEntry(entryId: string, newEntry: string) {
   if (!newEntry.trim()) return; // Prevent empty entries
 
   return await updateData('journal_entries', { id: entryId }, { journal_text: newEntry });
+}
+
+export async function getRandomPrompt(){
+  const entry = Math.floor(Math.random() * (MAX - 1) + 1)
+  const supabase = createClient()
+
+
+  const { data, error } = await supabase.from('prompts').select('prompt').eq('id', entry)
+  
+  return data;
 }

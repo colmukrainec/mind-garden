@@ -1,15 +1,15 @@
 "use client";
 
 //Core imports
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Third party imports
-import { Brain, NotebookPen } from "lucide-react";
+import { Brain, NotebookPen, RotateCcw } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 
 // Utility
-import { saveJournalEntry } from "@/utils/supabase/dbfunctions";
+import { saveJournalEntry, getRandomPrompt } from "@/utils/supabase/dbfunctions";
 
 //UI
 import {Card,CardContent,CardDescription,CardFooter,CardHeader,CardTitle} from "@/components/ui/card";
@@ -23,6 +23,16 @@ interface JournalEntryProps {
 
 export function JournalEntryCard({ userId }: JournalEntryProps) {
   const [entry, setEntry] = useState(""); // State to store textarea input
+  const [prompt, setPrompt] = useState("")
+
+  useEffect(() => {
+    async function getPrompt() {
+      const data = await getRandomPrompt()
+      if(data)
+        setPrompt(data[0].prompt)
+    }
+    getPrompt()
+  }, []);
 
   const handleInsert = async() => {
     //dont allow empty inserts
@@ -47,6 +57,12 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
 
   }
 
+  const handlePromptRefresh = async () =>{
+    const data = await getRandomPrompt();
+    if(data)
+      setPrompt(data[0].prompt)
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <Card className="bg-white/50 backdrop-blur-sm rounded-2xl">
@@ -61,6 +77,15 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
           <div className="flex items-center space-x-2">
             <CardDescription>Journal your thoughts</CardDescription>
             <Brain className="h-4 w-4" />
+          </div>
+          <div className="flex items-center space-x-2">
+            <CardDescription>New to journaling? Here is a prompt to help get you started: </CardDescription>
+          </div>
+          <div className="flex items-center space-x-2">
+            <CardDescription><b>{prompt}</b></CardDescription>
+            <button onClick={handlePromptRefresh}>
+              {<RotateCcw className="h-4 w-4"/>}
+            </button>
           </div>
         </CardHeader>
 
