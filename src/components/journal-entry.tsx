@@ -78,10 +78,8 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
             <CardDescription>Journal your thoughts</CardDescription>
             <Brain className="h-4 w-4" />
           </div>
-          <div className="flex items-center space-x-2">
-            <CardDescription>New to journaling? Here is a prompt to help get you started: </CardDescription>
-          </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 justify-center pt-8">
+            <CardDescription>Need inspiration?</CardDescription>
             <CardDescription><b>{prompt}</b></CardDescription>
             <button onClick={handlePromptRefresh}>
               {<RotateCcw className="h-4 w-4"/>}
