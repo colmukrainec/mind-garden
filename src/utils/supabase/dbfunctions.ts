@@ -151,7 +151,6 @@ export async function getRandomPrompt(){
   const entry = Math.floor(Math.random() * (MAX - 1) + 1)
   const supabase = createClient()
 
-
   const { data, error } = await supabase.from('prompts').select('prompt').eq('id', entry)
   
   return data;
