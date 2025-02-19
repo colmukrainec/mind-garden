@@ -1,0 +1,24 @@
+name: Prettier
+on: [push]
+
+jobs:
+  build:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: bahmutov/npm-install@v1
+
+      - run: npm run format  # Runs Prettier
+
+      - run: git config --global user.name "github-actions"
+      - run: git config --global user.email "github-actions@github.com"
+      - run: |
+          git add .
+          git commit -m "Apply Prettier formatting"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
