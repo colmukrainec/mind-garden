@@ -8,13 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }}  # Use the PAT to push changes
+          token: ${{ secrets.GH_PAT }} # Use the PAT to push changes
 
       - uses: bahmutov/npm-install@v1
 
-      - run: npm run format  # Run Prettier
+      - run: npm run format # Run Prettier
 
-      - run: git status  # Debug: Check if files were changed
+      - run: git status # Debug: Check if files were changed
 
       - name: Commit and push if changes exist
         run: |
