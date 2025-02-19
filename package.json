@@ -32,12 +32,11 @@
     "node-fetch": "^2.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-toastify": "^11.0.3",
     "react-swipe": "^6.0.4",
     "react-toastify": "^11.0.3",
+    "supertest": "^7.0.0",
     "swipe-js-iso": "^2.1.5",
     "swiper": "^11.2.3",
-    "supertest": "^7.0.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7"
   },
@@ -59,7 +58,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "jest": "^29.7.0",
     "postcss": "^8",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.1",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.2.5",
     "typescript": "^5"
