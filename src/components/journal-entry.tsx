@@ -27,9 +27,12 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
 
   useEffect(() => {
     async function getPrompt() {
-      const data = await getRandomPrompt()
-      if(data)
-        setPrompt(data[0].prompt)
+      const result = await getRandomPrompt()
+
+      if(result?.error)
+        setPrompt('Something went wrong...')
+      else if(result.data)
+        setPrompt(result.data[0].prompt)
     }
     getPrompt()
   }, []);
@@ -58,9 +61,12 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
   }
 
   const handlePromptRefresh = async () =>{
-    const data = await getRandomPrompt();
-    if(data)
-      setPrompt(data[0].prompt)
+    const result = await getRandomPrompt();
+    
+    if(result?.error)
+      setPrompt('Something went wrong...')
+    else if(result.data)
+      setPrompt(result.data[0].prompt)
   }
 
   return (

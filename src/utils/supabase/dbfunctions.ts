@@ -1,6 +1,5 @@
 import { createClient } from "./client";
 
-const MAX = 11;
 /**
  * Inserts data into a given Supabase table
  * @param table - The name of the table
@@ -148,10 +147,14 @@ export async function updateJournalEntry(entryId: string, newEntry: string) {
 }
 
 export async function getRandomPrompt(){
-  const entry = Math.floor(Math.random() * (MAX - 1) + 1)
   const supabase = createClient()
 
-  const { data, error } = await supabase.from('prompts').select('prompt').eq('id', entry)
+  const { data, error } = await supabase.rpc('get_random_prompt');
   
-  return data;
+  if(error){
+    console.error("Error fetching journal prompt:", error.message);
+    return { error: error.message };
+  }
+
+  return {data};
 }
