@@ -12,10 +12,14 @@ export default function ModifyPassword() {
   const newPass = useRef<HTMLInputElement>(null)
   const confirmPass = useRef<HTMLInputElement>(null)
 
-  const handleSubmit = () =>{
+  const handleSubmit = async () =>{
     if(confirmPass.current && newPass.current && confirmPass.current.value == newPass.current.value){
-      modifyPassword(newPass.current.value)
-      toast.success("Password updated successfully!")
+      const result = await modifyPassword(newPass.current.value)
+      if(result?.error){
+        toast.error(result.error)
+      } else {
+        toast.success("Password updated successfully!")
+      }
     }
     else if(confirmPass.current && newPass.current && confirmPass.current.value != newPass.current.value){
       toast.warn("Passwords do not match")

@@ -29,7 +29,7 @@ export async function signup(formData: FormData) {
   // Validate name fields
   const firstNameError = validateName(formData.get('firstName'), 'First name');
   if (firstNameError) return firstNameError;
-  
+
   const lastNameError = validateName(formData.get('lastName'), 'Last name');
   if (lastNameError) return lastNameError;
 
@@ -81,12 +81,12 @@ export async function deleteAccount(userId: string) {
   redirect('/')
 }
 
-export async function modifyAccount(firstName:string, lastName: string, email: string, userId: string){
+export async function modifyAccount(firstName: string, lastName: string, email: string, userId: string) {
   const supabase = await createClient()
 
   const firstNameError = validateName(firstName, 'First name');
   if (firstNameError) return firstNameError;
-  
+
   const lastNameError = validateName(lastName, 'Last name');
   if (lastNameError) return lastNameError;
 
@@ -97,26 +97,22 @@ export async function modifyAccount(firstName:string, lastName: string, email: s
   }
 
   const { error: updateError } = await supabase.from('users').update(dataIn).eq('id', userId)
-    
-  const { error } = await supabase.auth.admin.updateUserById(userId, {
-    email: email,
-    user_metadata: {
-        display_name: `${firstName} ${lastName}`
+  if(updateError) {
+    if(updateError.code === '23505') {
+      return { error: 'Email already in use' }
+    } else {
+      return { error: "An unexpected error occurred. Please try again later." }
     }
-  });
-
-  if(error || updateError){
-    redirect('/error')
   }
 }
 
-export async function modifyPassword(newPassword: string){
+export async function modifyPassword(newPassword: string) {
   const supabase = await createClient()
 
   const { error } = await supabase.auth.updateUser({ password: newPassword })
 
-  if(error){
-    redirect('/error')
+  if (error) {
+    return { error: error.message }
   }
 }
 

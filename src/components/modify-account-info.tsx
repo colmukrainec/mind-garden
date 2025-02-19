@@ -18,8 +18,12 @@ export default function ModifyAccount(props: { profileData: any, userId: string 
     const handleSubmit = async () => {
       // Check if the ref is not null before using it
       if (firstNameRef.current && lastNameRef.current && emailRef.current) {
-        await modifyAccount(firstNameRef.current.value, lastNameRef.current.value, emailRef.current.value, props.userId)
-        toast.success("Profile updated successfully!")
+        const result = await modifyAccount(firstNameRef.current.value, lastNameRef.current.value, emailRef.current.value, props.userId)
+        if (result?.error) {
+          toast.error(result.error)
+        } else {
+          toast.success("Profile updated successfully!")
+        }
       }
     };
 
