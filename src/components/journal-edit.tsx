@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Utility
-import { updateJournalEntry } from "@/utils/supabase/dbfunctions";
+import { deleteJournalEntry, updateJournalEntry } from "@/utils/supabase/dbfunctions";
 
 // UI
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,6 +44,12 @@ export function JournalEntryEditCard(item: Readonly<JournalEntry>) {
     result?.error ? toast.error("Failed to update journal entry.") : toast.success("Journal entry updated successfully!");
   };
 
+  const handleDelete = async () => {
+    const result = await deleteJournalEntry(item.id)
+
+    result?.error ? toast.error("Failed to delete journal entry.") : toast.success("Journal entry deleted successfully!");
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <Card className="bg-white/50 backdrop-blur-sm rounded-2xl">
@@ -66,10 +72,11 @@ export function JournalEntryEditCard(item: Readonly<JournalEntry>) {
         </CardContent>
 
         {/* Footer */}
-        <CardFooter>
+        <CardFooter className="flex justify-top gap-2">
           <Button onClick={handleUpdate} disabled={isUpdating}>
             {isUpdating ? "Updating..." : "Update Entry"}
           </Button>
+          <Button onClick={handleDelete}> Delete Entry </Button>
         </CardFooter>
       </Card>
     </div>
