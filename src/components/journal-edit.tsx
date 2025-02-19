@@ -45,8 +45,9 @@ export function JournalEntryEditCard(item: Readonly<JournalEntry>) {
   };
 
   const handleDelete = async () => {
-    await deleteJournalEntry(item.id)
-    window.location.reload()
+    const result = await deleteJournalEntry(item.id)
+
+    result?.error ? toast.error("Failed to delete journal entry.") : toast.success("Journal entry deleted successfully!");
   }
 
   return (
