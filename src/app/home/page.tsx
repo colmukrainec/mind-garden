@@ -7,7 +7,7 @@ import { ProfileDropdown } from '@/components/profile-dropdown';
 import { JournalButton } from '@/components/journal-button';
 import Footer from '@/components/footer'
 import DataIntakeForm from "@/components/data-intake-form";
-import {selectAllFromAttributes, selectAllFromCategories} from "@/actions/form-data";
+import {selectAllFromAttributes, selectAllFromCategories} from "@/utils/supabase/dbfunctions";
 
 export default async function PrivatePage() {
   const supabase = await createClient()

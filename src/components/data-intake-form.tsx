@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { deleteResponses, insertResponses, selectResponsesByDate } from "@/actions/form-data";
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import {deleteResponses, insertResponses, selectResponsesByDate} from "@/utils/supabase/dbfunctions";
 import AttributeIcon from "@/components/attribute-icon";
 import ToggleButton from "@/components/toggle-button";
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {LoaderCircle} from "lucide-react";
-import { IAttributes, ICategories, IResponses } from "@/utils/supabase/schema";
+import {IAttributes, ICategories} from "@/utils/supabase/schema";
 import ScaleIcon from "@/components/scale-icon";
 
 interface DataIntakeFormProps {
@@ -34,8 +34,9 @@ function DataIntakeForm({ userId, categories, attributes }: DataIntakeFormProps)
         const responses = await selectResponsesByDate(userId, new Date().toISOString().split("T")[0]);
 
         if (mounted) {
-          setCurrentResponses(new Set(responses?.map((response: IResponses) => response.attribute_id)));
-          setCurrentSelection(new Set(responses?.map((response: IResponses) => response.attribute_id)));
+          setCurrentResponses(new Set(responses?.[0]?.attribute_ids ?? []));
+          setCurrentSelection(new Set(responses?.[0]?.attribute_ids ?? []));
+          setScaleSelection(responses?.[0]?.scale_rating ?? null);
           setLoadingResponses(false);
           if (responses && responses.length > 0) setCompletedForm(true);
         }
@@ -93,7 +94,7 @@ function DataIntakeForm({ userId, categories, attributes }: DataIntakeFormProps)
 
     try {
       await Promise.all([
-        addedResponses.size > 0 ? insertResponses(addedResponses, userId) : Promise.resolve(),
+        addedResponses.size > 0 ? insertResponses(addedResponses, userId, scaleSelection) : Promise.resolve(),
         removedResponses.size > 0 ? deleteResponses(removedResponses, userId) : Promise.resolve(),
       ]);
 
