@@ -71,6 +71,29 @@ body {
   }
 }
 
+.bg-gradient {
+  background: linear-gradient(-45deg, #67E482, #62bcd2, #23d5ab, #ffffff);
+  background-size: 400% 400%;
+  min-height: 100%;
+  height: 100%;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 15s ease infinite;
+}
+
 .journal-swiper {
   position: relative;
   width: 100%;

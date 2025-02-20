@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import { Bell } from "lucide-react"
 
-import DeleteAccount from '../../components/DeleteAccount';
 import { createClient } from "@/utils/supabase/server"
 import { Particles } from "@/components/magicui/particles"
 import { Button } from "@/components/ui/button"
@@ -9,6 +8,8 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/comp
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import { JournalButton } from "@/components/journal-button";
 import Footer from "@/components/footer";
+
+import DeleteAccount from "@/components/delete-account";
 import ModifyAccount from "@/components/modify-account-info";
 import ModifyPassword from "@/components/modify-password";
 import { ToastContainer } from "react-toastify";
@@ -33,13 +34,7 @@ export default async function ProfilePage() {
     }
 
     return (
-        <div
-            className="min-h-screen flex flex-col"
-            style={{
-                backgroundImage: "url(/gradient.svg)",
-                backgroundSize: "cover",
-            }}
-        >
+        <div className="min-h-screen flex flex-col inset-0 -z-10 animate-gradient bg-gradient">
             <Particles className="absolute inset-0 z-0" quantity={200} ease={80} color={"#000000"} refresh />
             <ToastContainer/>
             <header className="border-b bg-white/50 backdrop-blur-sm mt-4 mx-4 rounded-full">

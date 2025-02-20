@@ -23,7 +23,8 @@ export interface ISleepEntries {
 export interface IResponses {
   id: string,
   user_id: string,
-  attribute_id: string,
+  scale_rating: number,
+  attribute_ids?: Array<string>,
   entry_date: string,
 }
 
