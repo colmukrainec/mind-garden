@@ -154,8 +154,11 @@ export async function updateJournalEntry(entryId: string, newEntry: string) {
  */
 export async function selectAllFromCategories(): Promise<Array<ICategories> | null> {
   const {data, error} = await selectData<ICategories>("categories");
-  if (error) throw new Error(error.message);
-  return data;
+  if (error) {
+    console.error(`Error selecting responses by date:`, error.message);
+    return null;
+  }
+  return data as unknown as ICategories[];
 }
 
 /**
@@ -165,7 +168,7 @@ export async function selectAllFromCategories(): Promise<Array<ICategories> | nu
 export async function selectAllFromAttributes(): Promise<Array<IAttributes> | null> {
   const {data, error} = await selectData<IAttributes>("attributes");
   if (error) throw new Error(error.message);
-  return data;
+  return data as unknown as IAttributes[];
 }
 
 /**
@@ -181,7 +184,7 @@ export async function selectResponsesByDate(userId: string, entryDate: string): 
   });
 
   if (error) throw new Error(error.message);
-  return data;
+  return data as unknown as IResponses[];
 }
 
 /**
