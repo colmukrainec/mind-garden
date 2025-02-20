@@ -121,3 +121,32 @@ const validateName = (name: FormDataEntryValue | null, field: string) => {
   if (typeof name !== 'string') return { error: `${field} must be a string` };
   if (name.length < 2) return { error: `${field} must be at least 2 characters long` };
 };
+
+export async function forgotPassword(email: string) {
+  const supabase = await createClient()
+  //const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"; // Fallback for local testing
+  const siteUrl = "http://localhost:3000"
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl}/reset-password`,
+  });
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return { success: "Password reset link set to your email." }
+}
+
+
+
+export async function authenticateResetCode(code: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+  if (error) {
+    return { error: error.message };
+  }
+  
+  return { data: data.session }; // Return the session if successful
+}

@@ -10,12 +10,15 @@ import { Mail, Lock, User, CircleAlert, LoaderCircle } from "lucide-react"
 import { Particles } from "@/components/magicui/particles";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import Footer from '@/components/footer';
+import { useRouter } from 'next/navigation'; 
+import { forgotPassword } from '@/actions/auth';
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const router = useRouter();
   /**
    * Handles authentication by calling the appropriate function
    * (login or signup) based on the value of isLogin. If the
@@ -39,6 +42,24 @@ export default function Home() {
   useEffect(() => {
     setError('');
   }, [isLogin]);
+
+  const handleForgotPassword = async () => {
+    // Handle forgot password
+    const email = prompt("Enter your email address to reset your password");
+    if (!email) return;
+
+    setIsLoading(true);
+    try {
+      const { error, success } = await forgotPassword(email);
+      if (error) {
+        setError(error); // Show the error if the email is not valid or any other issue
+      } else {
+        alert(success); // Notify user that reset email is sent
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center py-16" style={{
@@ -142,7 +163,8 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-base">Password</Label>
                 {isLogin && (
-                  <p className="text-base text-green-600 hover:text-green-700 transition-colors">
+                  <p className="text-base text-green-600 hover:text-green-700 transition-colors"
+                    onClick={handleForgotPassword}>
                     Forgot password?
                   </p>
                 )}
