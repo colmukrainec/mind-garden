@@ -29,7 +29,7 @@ export async function signup(formData: FormData) {
   // Validate name fields
   const firstNameError = validateName(formData.get('firstName'), 'First name');
   if (firstNameError) return firstNameError;
-  
+
   const lastNameError = validateName(formData.get('lastName'), 'Last name');
   if (lastNameError) return lastNameError;
 
@@ -79,6 +79,41 @@ export async function deleteAccount(userId: string) {
 
   revalidatePath('/', 'layout')
   redirect('/')
+}
+
+export async function modifyAccount(firstName: string, lastName: string, email: string, userId: string) {
+  const supabase = await createClient()
+
+  const firstNameError = validateName(firstName, 'First name');
+  if (firstNameError) return firstNameError;
+
+  const lastNameError = validateName(lastName, 'Last name');
+  if (lastNameError) return lastNameError;
+
+  const dataIn = {
+    email: email,
+    first_name: firstName,
+    last_name: lastName,
+  }
+
+  const { error: updateError } = await supabase.from('users').update(dataIn).eq('id', userId)
+  if(updateError) {
+    if(updateError.code === '23505') {
+      return { error: 'Email already in use' }
+    } else {
+      return { error: "An unexpected error occurred. Please try again later." }
+    }
+  }
+}
+
+export async function modifyPassword(newPassword: string) {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword })
+
+  if (error) {
+    return { error: error.message }
+  }
 }
 
 const validateName = (name: FormDataEntryValue | null, field: string) => {

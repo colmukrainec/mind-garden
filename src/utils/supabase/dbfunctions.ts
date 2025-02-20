@@ -216,3 +216,10 @@ export async function deleteResponses(attributeIds: Set<string>, userId: string)
   if (error) throw new Error(error.message);
 
 }
+
+export async function deleteJournalEntry(entryId: string) {
+  const supabase = createClient();
+  
+  return await supabase.from('journal_entries').delete().eq('id', entryId)
+}
+
