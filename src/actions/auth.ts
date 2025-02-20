@@ -124,7 +124,6 @@ const validateName = (name: FormDataEntryValue | null, field: string) => {
 
 export async function forgotPassword(email: string) {
   const supabase = await createClient()
-  //const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"; // Fallback for local testing
   const siteUrl = "http://localhost:3000"
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -148,5 +147,5 @@ export async function authenticateResetCode(code: string) {
     return { error: error.message };
   }
   
-  return { data: data.session }; // Return the session if successful
+  return { data: data.session }; 
 }
