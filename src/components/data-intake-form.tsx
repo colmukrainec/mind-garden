@@ -163,7 +163,7 @@ function DataIntakeForm({ userId, categories, attributes }: DataIntakeFormProps)
           <p className="font-bold text-xl">Rate your day:</p>
           <div className="flex justify-center gap-4 mt-2">
             {[1, 2, 3, 4, 5].map((rating) => (
-              <ToggleButton
+              <ToggleButton<number>
                 key={rating}
                 value={rating}
                 isSelected={scaleSelection === rating}
@@ -199,7 +199,7 @@ function DataIntakeForm({ userId, categories, attributes }: DataIntakeFormProps)
                 <CardContent>
                   <div className="flex flex-wrap justify-center gap-2">
                     {categoryAttributes.map((attr: IAttributes) => (
-                      <ToggleButton
+                      <ToggleButton<string>
                         key={attr.id}
                         value={attr.id}
                         isSelected={currentSelection.has(attr.id)}
