@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import { JournalButton } from "@/components/journal-button";
+import { SleepTrackerButton } from "@/components/sleep-tracker-button";
 import Footer from "@/components/footer";
 
 import DeleteAccount from "@/components/delete-account";
@@ -46,6 +47,8 @@ export default async function ProfilePage() {
                     <div className="flex items-center gap-4">
                         {/* Button to go into journal page */}
                         <JournalButton />
+                        {/* Button to go into sleep tracker page */}
+                        <SleepTrackerButton />
                         <Button variant="ghost" size="icon">
                             <Bell className="h-5 w-5" />
                         </Button>

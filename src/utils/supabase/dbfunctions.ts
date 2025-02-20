@@ -223,3 +223,26 @@ export async function deleteJournalEntry(entryId: string) {
   return await supabase.from('journal_entries').delete().eq('id', entryId)
 }
 
+/**
+ * Inserts new sleep entries into the database.
+ * @param startTime - Start time of the sleep
+ * @param endTime - End time of the sleep
+ * @param userId - The user's ID
+ */
+export async function insertSleepEntry(startTime: string, endTime: string, userId: string) {
+  const entryDate = new Date().toISOString().split("T")[0];
+
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+
+  const startTimeOnly = start.toTimeString().slice(0, 5);
+  const endTimeOnly = end.toTimeString().slice(0, 5); 
+
+  return await insertData("sleep_entries", {
+    user_id: userId,
+    start: startTimeOnly, 
+    end: endTimeOnly,     
+    entry_date: entryDate 
+  });
+}
+
