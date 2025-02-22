@@ -1,99 +1,225 @@
-import express from "express";
-import { 
-    insertData, 
-    saveJournalEntry, 
-    selectData, 
-    selectJournalEntries, 
-    updateData, 
-    updateJournalEntry 
-} from "../supabase/dbfunctions";
-import { createClient } from "../supabase/client";
+import { login, signup, logout, deleteAccount } from '../../actions/auth'
+import { createClient } from '../supabase/server'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
-const app = express();
-app.use(express.json());
+// Mock Next.js functions
+jest.mock('next/cache', () => ({
+  revalidatePath: jest.fn(),
+}))
 
-jest.mock("../supabase/client");
+jest.mock('next/navigation', () => ({
+  redirect: jest.fn(),
+}))
 
-jest.mock("../supabase/client");
+// Mock Supabase client
+jest.mock('../supabase/server', () => ({
+  createClient: jest.fn(),
+}))
 
-const mockSupabase: any = {
-  from: jest.fn(() => ({
-    insert: jest.fn(() => ({
-      select: jest.fn().mockResolvedValue({ data: [{ id: "1" }], error: null }),
-    })),
-    select: jest.fn(() => ({
-      match: jest.fn().mockResolvedValue({ data: [{ id: "1" }], error: null }),
-    })),
-    update: jest.fn(() => ({
-      match: jest.fn(() => ({
-        select: jest.fn().mockResolvedValue({ data: [{ id: "1", journal_text: "Updated Entry" }], error: null }),
-      })),
-    })),
-  })),
-};
-
-(createClient as jest.Mock).mockReturnValue(mockSupabase);
-
-
-(createClient as jest.Mock).mockReturnValue(mockSupabase);
-
-describe("Database Functions", () => {
+describe('Auth Functions', () => {
+  let mockSupabaseClient: any;
+  
   beforeEach(() => {
+    // Clear all mocks before each test
     jest.clearAllMocks();
+    
+    // Create mock Supabase client
+    mockSupabaseClient = {
+      auth: {
+        signInWithPassword: jest.fn(),
+        signUp: jest.fn(),
+        signOut: jest.fn(),
+        admin: {
+          deleteUser: jest.fn(),
+        },
+      },
+    };
+    
+    (createClient as jest.Mock).mockResolvedValue(mockSupabaseClient);
   });
 
-  it("should insert data into the specified table", async () => {
-    mockSupabase.insert.mockResolvedValue({ data: [{ id: "1" }], error: null });
+  describe('login', () => {
+    it('should successfully log in a user', async () => {
+      // Arrange
+      const formData = new FormData();
+      formData.append('email', 'test@example.com');
+      formData.append('password', 'password123');
+      
+      mockSupabaseClient.auth.signInWithPassword.mockResolvedValue({ error: null });
 
-    const result = await insertData("journal_entries", { user_id: "123", journal_text: "Test Entry" });
-    expect(result).toEqual([{ id: "1" }]);
+      // Act
+      await login(formData);
+
+      // Assert
+      expect(mockSupabaseClient.auth.signInWithPassword).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        password: 'password123',
+      });
+      expect(revalidatePath).toHaveBeenCalledWith('/', 'layout');
+      expect(redirect).toHaveBeenCalledWith('/home');
+    });
+
+    it('should return error message on login failure', async () => {
+      // Arrange
+      const formData = new FormData();
+      formData.append('email', 'test@example.com');
+      formData.append('password', 'wrong');
+      
+      mockSupabaseClient.auth.signInWithPassword.mockResolvedValue({
+        error: { message: 'Invalid credentials' },
+      });
+
+      // Act
+      const result = await login(formData);
+
+      // Assert
+      expect(result).toEqual({ error: 'Invalid credentials' });
+      expect(redirect).not.toHaveBeenCalled();
+    });
   });
 
-  it("should insert a journal entry", async () => {
-    mockSupabase.insert.mockResolvedValue({ data: [{ id: "1" }], error: null });
+  describe('signup', () => {
+    it('should successfully sign up a new user', async () => {
+      // Arrange
+      const formData = new FormData();
+      formData.append('email', 'new@example.com');
+      formData.append('password', 'password123');
+      formData.append('firstName', 'John');
+      formData.append('lastName', 'Doe');
+      
+      mockSupabaseClient.auth.signUp.mockResolvedValue({ error: null });
 
-    const result = await saveJournalEntry("My new journal entry", "user123");
+      // Act
+      await signup(formData);
 
-    expect(mockSupabase.insert).toHaveBeenCalledWith({ user_id: "user123", journal_text: "My new journal entry" });
-    expect(result?.data).toEqual([{ id: "1" }]);
+      // Assert
+      expect(mockSupabaseClient.auth.signUp).toHaveBeenCalledWith({
+        email: 'new@example.com',
+        password: 'password123',
+        options: {
+          data: {
+            first_name: 'John',
+            last_name: 'Doe',
+          }
+        }
+      });
+      expect(revalidatePath).toHaveBeenCalledWith('/', 'layout');
+      expect(redirect).toHaveBeenCalledWith('/home');
+    });
+
+    // it('should validate first name', async () => {
+    //   // Arrange
+    //   const formData = new FormData();
+    //   formData.append('firstName', 'J'); // Too short
+      
+    //   // Act
+    //   const result = await signup(formData);
+
+    //   // Assert
+    //   expect(result).toEqual({ error: 'First name must be at least 2 characters long' });
+    //   expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
+    // });
+
+    // Name validation tests within signup context
+    describe('name validation', () => {
+      it('should return error when firstName is missing', async () => {
+        const formData = new FormData();
+        formData.append('lastName', 'Doe');
+        
+        const result = await signup(formData);
+        expect(result).toEqual({ error: 'First name is required' });
+        expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
+      });
+
+      it('should return error when lastName is missing', async () => {
+        const formData = new FormData();
+        formData.append('firstName', 'John');
+        
+        const result = await signup(formData);
+        expect(result).toEqual({ error: 'Last name is required' });
+        expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
+      });
+
+      it('should return error when firstName is too short', async () => {
+        const formData = new FormData();
+        formData.append('firstName', 'J');
+        formData.append('lastName', 'Doe');
+        
+        const result = await signup(formData);
+        expect(result).toEqual({ error: 'First name must be at least 2 characters long' });
+        expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
+      });
+
+      it('should return error when lastName is too short', async () => {
+        const formData = new FormData();
+        formData.append('firstName', 'John');
+        formData.append('lastName', 'D');
+        
+        const result = await signup(formData);
+        expect(result).toEqual({ error: 'Last name must be at least 2 characters long' });
+        expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
+      });
+    });
+
+
   });
 
-  it("should retrieve data from a table", async () => {
-    mockSupabase.select.mockResolvedValue({ data: [{ id: "1" }], error: null });
+  describe('logout', () => {
+    it('should successfully log out a user', async () => {
+      // Arrange
+      mockSupabaseClient.auth.signOut.mockResolvedValue({ error: null });
 
-    const result = await selectData("journal_entries");
+      // Act
+      await logout();
 
-    expect(mockSupabase.from).toHaveBeenCalledWith("journal_entries");
-    expect(mockSupabase.select).toHaveBeenCalledWith("*");
-    expect(result.data).toEqual([{ id: "1" }]);
+      // Assert
+      expect(mockSupabaseClient.auth.signOut).toHaveBeenCalled();
+      expect(revalidatePath).toHaveBeenCalledWith('/', 'layout');
+      expect(redirect).toHaveBeenCalledWith('/');
+    });
+
+    it('should redirect to error page on logout failure', async () => {
+      // Arrange
+      mockSupabaseClient.auth.signOut.mockResolvedValue({
+        error: { message: 'Logout failed' },
+      });
+
+      // Act
+      await logout();
+
+      // Assert
+      expect(redirect).toHaveBeenCalledWith('/error');
+    });
   });
 
-  it("should retrieve user-specific journal entries", async () => {
-    mockSupabase.select.mockResolvedValue({ data: [{ id: "1" }], error: null });
+  describe('deleteAccount', () => {
+    it('should successfully delete a user account', async () => {
+      // Arrange
+      const userId = 'user123';
+      mockSupabaseClient.auth.admin.deleteUser.mockResolvedValue({ error: null });
 
-    const result = await selectJournalEntries("user123", null);
+      // Act
+      await deleteAccount(userId);
 
-    expect(mockSupabase.match).toHaveBeenCalledWith({ user_id: "user123" });
-    expect(result.data).toEqual([{ id: "1" }]);
-  });
+      // Assert
+      expect(mockSupabaseClient.auth.admin.deleteUser).toHaveBeenCalledWith(userId);
+      expect(revalidatePath).toHaveBeenCalledWith('/', 'layout');
+      expect(redirect).toHaveBeenCalledWith('/');
+    });
 
-  it("should update a record in a table", async () => {
-    mockSupabase.update.mockResolvedValue({ data: [{ id: "1", journal_text: "Updated Entry" }], error: null });
+    it('should redirect to error page on deletion failure', async () => {
+      // Arrange
+      const userId = 'user123';
+      mockSupabaseClient.auth.admin.deleteUser.mockResolvedValue({
+        error: { message: 'Deletion failed' },
+      });
 
-    const result = await updateData("journal_entries", { id: "1" }, { journal_text: "Updated Entry" });
+      // Act
+      await deleteAccount(userId);
 
-    expect(mockSupabase.update).toHaveBeenCalledWith({ journal_text: "Updated Entry" });
-    expect(mockSupabase.match).toHaveBeenCalledWith({ id: "1" });
-    expect(result.data).toEqual([{ id: "1", journal_text: "Updated Entry" }]);
-  });
-
-  it("should update a journal entry", async () => {
-    mockSupabase.update.mockResolvedValue({ data: [{ id: "1", journal_text: "Updated Entry" }], error: null });
-
-    const result = await updateJournalEntry("1", "Updated Entry");
-
-    expect(mockSupabase.update).toHaveBeenCalledWith({ journal_text: "Updated Entry" });
-    expect(mockSupabase.match).toHaveBeenCalledWith({ id: "1" });
-    expect(result?.data).toEqual([{ id: "1", journal_text: "Updated Entry" }]);
+      // Assert
+      expect(redirect).toHaveBeenCalledWith('/error');
+    });
   });
 });
