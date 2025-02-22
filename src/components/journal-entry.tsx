@@ -26,14 +26,6 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
   const [prompt, setPrompt] = useState("")
 
   useEffect(() => {
-    async function getPrompt() {
-      const result = await getRandomPrompt()
-
-      if(result?.error)
-        setPrompt('Something went wrong...')
-      else if(result.data)
-        setPrompt(result.data[0].prompt)
-    }
     getPrompt()
   }, []);
 
@@ -60,9 +52,9 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
 
   }
 
-  const handlePromptRefresh = async () =>{
+  const getPrompt = async () =>{
     const result = await getRandomPrompt();
-    
+
     if(result?.error)
       setPrompt('Something went wrong...')
     else if(result.data)
@@ -87,7 +79,7 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
           <div className="flex items-center space-x-2 justify-center pt-8">
             <CardDescription>Need inspiration?</CardDescription>
             <CardDescription><b>{prompt}</b></CardDescription>
-            <button onClick={handlePromptRefresh}>
+            <button onClick={getPrompt}>
               {<RotateCcw className="h-4 w-4"/>}
             </button>
           </div>

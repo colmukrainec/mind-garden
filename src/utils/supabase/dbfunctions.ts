@@ -152,7 +152,6 @@ export async function getRandomPrompt(){
   const { data, error } = await supabase.rpc('get_random_prompt');
   
   if(error){
-    console.error("Error fetching journal prompt:", error.message);
     return { error: error.message };
   }
 
