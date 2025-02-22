@@ -1,29 +1,29 @@
-import { login, signup, logout, deleteAccount } from '../../actions/auth'
-import { createClient } from '../supabase/server'
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { login, signup, logout, deleteAccount } from '../../actions/auth';
+import { createClient } from '../supabase/server';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 // Mock Next.js functions
 jest.mock('next/cache', () => ({
   revalidatePath: jest.fn(),
-}))
+}));
 
 jest.mock('next/navigation', () => ({
   redirect: jest.fn(),
-}))
+}));
 
 // Mock Supabase client
 jest.mock('../supabase/server', () => ({
   createClient: jest.fn(),
-}))
+}));
 
 describe('Auth Functions', () => {
   let mockSupabaseClient: any;
-  
+
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
-    
+
     // Create mock Supabase client
     mockSupabaseClient = {
       auth: {
@@ -35,7 +35,7 @@ describe('Auth Functions', () => {
         },
       },
     };
-    
+
     (createClient as jest.Mock).mockResolvedValue(mockSupabaseClient);
   });
 
@@ -45,8 +45,10 @@ describe('Auth Functions', () => {
       const formData = new FormData();
       formData.append('email', 'test@example.com');
       formData.append('password', 'password123');
-      
-      mockSupabaseClient.auth.signInWithPassword.mockResolvedValue({ error: null });
+
+      mockSupabaseClient.auth.signInWithPassword.mockResolvedValue({
+        error: null,
+      });
 
       // Act
       await login(formData);
@@ -65,7 +67,7 @@ describe('Auth Functions', () => {
       const formData = new FormData();
       formData.append('email', 'test@example.com');
       formData.append('password', 'wrong');
-      
+
       mockSupabaseClient.auth.signInWithPassword.mockResolvedValue({
         error: { message: 'Invalid credentials' },
       });
@@ -87,7 +89,7 @@ describe('Auth Functions', () => {
       formData.append('password', 'password123');
       formData.append('firstName', 'John');
       formData.append('lastName', 'Doe');
-      
+
       mockSupabaseClient.auth.signUp.mockResolvedValue({ error: null });
 
       // Act
@@ -101,8 +103,8 @@ describe('Auth Functions', () => {
           data: {
             first_name: 'John',
             last_name: 'Doe',
-          }
-        }
+          },
+        },
       });
       expect(revalidatePath).toHaveBeenCalledWith('/', 'layout');
       expect(redirect).toHaveBeenCalledWith('/home');
@@ -112,7 +114,7 @@ describe('Auth Functions', () => {
     //   // Arrange
     //   const formData = new FormData();
     //   formData.append('firstName', 'J'); // Too short
-      
+
     //   // Act
     //   const result = await signup(formData);
 
@@ -126,7 +128,7 @@ describe('Auth Functions', () => {
       it('should return error when firstName is missing', async () => {
         const formData = new FormData();
         formData.append('lastName', 'Doe');
-        
+
         const result = await signup(formData);
         expect(result).toEqual({ error: 'First name is required' });
         expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
@@ -135,7 +137,7 @@ describe('Auth Functions', () => {
       it('should return error when lastName is missing', async () => {
         const formData = new FormData();
         formData.append('firstName', 'John');
-        
+
         const result = await signup(formData);
         expect(result).toEqual({ error: 'Last name is required' });
         expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
@@ -145,9 +147,11 @@ describe('Auth Functions', () => {
         const formData = new FormData();
         formData.append('firstName', 'J');
         formData.append('lastName', 'Doe');
-        
+
         const result = await signup(formData);
-        expect(result).toEqual({ error: 'First name must be at least 2 characters long' });
+        expect(result).toEqual({
+          error: 'First name must be at least 2 characters long',
+        });
         expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
       });
 
@@ -155,14 +159,14 @@ describe('Auth Functions', () => {
         const formData = new FormData();
         formData.append('firstName', 'John');
         formData.append('lastName', 'D');
-        
+
         const result = await signup(formData);
-        expect(result).toEqual({ error: 'Last name must be at least 2 characters long' });
+        expect(result).toEqual({
+          error: 'Last name must be at least 2 characters long',
+        });
         expect(mockSupabaseClient.auth.signUp).not.toHaveBeenCalled();
       });
     });
-
-
   });
 
   describe('logout', () => {
@@ -197,13 +201,17 @@ describe('Auth Functions', () => {
     it('should successfully delete a user account', async () => {
       // Arrange
       const userId = 'user123';
-      mockSupabaseClient.auth.admin.deleteUser.mockResolvedValue({ error: null });
+      mockSupabaseClient.auth.admin.deleteUser.mockResolvedValue({
+        error: null,
+      });
 
       // Act
       await deleteAccount(userId);
 
       // Assert
-      expect(mockSupabaseClient.auth.admin.deleteUser).toHaveBeenCalledWith(userId);
+      expect(mockSupabaseClient.auth.admin.deleteUser).toHaveBeenCalledWith(
+        userId,
+      );
       expect(revalidatePath).toHaveBeenCalledWith('/', 'layout');
       expect(redirect).toHaveBeenCalledWith('/');
     });

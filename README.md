@@ -196,7 +196,7 @@ Setting up code scan/code review
 
 ## Running Tests Using Jest
 
-1. Create a file named *.spec.ts, for example `dbfunctions.spec.ts`
+1. Create a file named \*.spec.ts, for example `dbfunctions.spec.ts`
 2. Write in the tests you desire to run
 3. In the CLI type, `npx jest 'dbfunctions.spec.ts'`
 4. If you wish to run it with test coverage type, `npx jest --coverage 'dbfunctions.spec.ts'`
