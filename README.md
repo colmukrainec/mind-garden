@@ -200,3 +200,4 @@ Setting up code scan/code review
 2. Write in the tests you desire to run
 3. In the CLI type, `npx jest 'dbfunctions.spec.ts'`
 4. If you wish to run it with test coverage type, `npx jest --coverage 'dbfunctions.spec.ts'`
+5. If you wish to run it with test coverage for a specific directory type, `npm run test:coverage --path='x'` where x is the directory for your test file, i.e. `'src/utils/supabse'`
