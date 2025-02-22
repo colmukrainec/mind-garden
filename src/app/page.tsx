@@ -12,6 +12,8 @@ import { WordRotate } from "@/components/magicui/word-rotate";
 import Footer from '@/components/footer';
 import { useRouter } from 'next/navigation'; 
 import { forgotPassword } from '@/actions/auth';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
@@ -43,18 +45,27 @@ export default function Home() {
     setError('');
   }, [isLogin]);
 
+  /**
+   * Handles the forgot password functionality. It prompts the user to 
+   * enter their email address and sends a reset email if the email is
+   * valid. If the email is not valid or there is any other issue, it
+   * shows an error message.
+   */
   const handleForgotPassword = async () => {
-    // Handle forgot password
-    const email = prompt("Enter your email address to reset your password");
-    if (!email) return;
-
+    const email = document.querySelector<HTMLInputElement>("#email")?.value;
+    
+    if (!email) {
+      toast.warn("Please enter your email first.");
+      return;
+    }
+  
     setIsLoading(true);
     try {
       const { error, success } = await forgotPassword(email);
       if (error) {
-        setError(error); // Show the error if the email is not valid or any other issue
+        setError(error);
       } else {
-        alert(success); // Notify user that reset email is sent
+        toast.success("Password reset email sent successfully.");
       }
     } finally {
       setIsLoading(false);
