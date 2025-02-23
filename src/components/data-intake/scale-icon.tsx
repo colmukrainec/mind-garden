@@ -1,4 +1,5 @@
 import { Angry, Frown, Laugh, LucideIcon, Meh, Smile } from 'lucide-react';
+import {ReactNode} from "react";
 
 interface ScaleIconProps {
   scaleRating: number;

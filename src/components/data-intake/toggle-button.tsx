@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React, {JSX, ReactNode} from 'react';
 
 interface ToggleButtonProps<T extends string | number> {
   value: T;
@@ -35,4 +35,4 @@ function ToggleButton<T extends string | number>({
 // Wrap the component AFTER defining it
 export default React.memo(ToggleButton) as <T extends string | number>(
   props: ToggleButtonProps<T>,
-) => JSX.Element;
+) => ReactNode;

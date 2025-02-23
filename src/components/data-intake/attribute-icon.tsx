@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {
   AlarmClockCheck,
   Angry,
@@ -91,7 +91,7 @@ interface AttributeIconProps {
 const AttributeIcon: React.FC<AttributeIconProps> = ({
   category,
   attribute,
-}) => {
+}): ReactNode => {
   const DEFAULT_ICON = X;
   const ICON_MAP: Record<string, Record<string, LucideIcon | null>> = {
     other: {
