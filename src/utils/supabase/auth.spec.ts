@@ -1,4 +1,11 @@
-import { login, signup, logout, deleteAccount, modifyAccount, modifyPassword } from '@/actions/auth';
+import {
+  login,
+  signup,
+  logout,
+  deleteAccount,
+  modifyAccount,
+  modifyPassword,
+} from '@/actions/auth';
 import { createClient } from './server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -26,7 +33,7 @@ describe('Auth Functions', () => {
 
     const mockEq = jest.fn();
     const mockUpdate = jest.fn(() => ({
-      eq: mockEq, 
+      eq: mockEq,
     }));
 
     // Create mock Supabase client
@@ -189,7 +196,9 @@ describe('Auth Functions', () => {
   describe('logout', () => {
     it('should successfully log out a user', async () => {
       // Arrange
-      mockSupabaseClient.auth.getUser.mockResolvedValue({ data: { user: { id: 'user123' } } });
+      mockSupabaseClient.auth.getUser.mockResolvedValue({
+        data: { user: { id: 'user123' } },
+      });
 
       // Act
       await logout();
@@ -242,17 +251,17 @@ describe('Auth Functions', () => {
         firstName: 'John',
         lastName: 'Smith',
         email: 'john.smith@example.com',
-        userId: 'user123'
+        userId: 'user123',
       };
 
-      mockSupabaseClient.from().update().eq.mockResolvedValue({ error:  null });
+      mockSupabaseClient.from().update().eq.mockResolvedValue({ error: null });
 
       // Act
       const result = await modifyAccount(
         userData.firstName,
         userData.lastName,
         userData.email,
-        userData.userId
+        userData.userId,
       );
 
       // Assert
@@ -260,9 +269,12 @@ describe('Auth Functions', () => {
       expect(mockSupabaseClient.from().update).toHaveBeenCalledWith({
         email: userData.email,
         first_name: userData.firstName,
-        last_name: userData.lastName
+        last_name: userData.lastName,
       });
-      expect(mockSupabaseClient.from().update().eq).toHaveBeenCalledWith('id', userData.userId);
+      expect(mockSupabaseClient.from().update().eq).toHaveBeenCalledWith(
+        'id',
+        userData.userId,
+      );
       expect(result).toBeUndefined();
     });
 
@@ -272,19 +284,25 @@ describe('Auth Functions', () => {
         firstName: 'John',
         lastName: 'Smith',
         email: 'existing@example.com',
-        userId: 'user123'
+        userId: 'user123',
       };
 
-      mockSupabaseClient.from().update().eq.mockResolvedValue({
-        error: { code: '23505', message: 'duplicate key value violates unique constraint' }
-      });
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq.mockResolvedValue({
+          error: {
+            code: '23505',
+            message: 'duplicate key value violates unique constraint',
+          },
+        });
 
       // Act
       const result = await modifyAccount(
         userData.firstName,
         userData.lastName,
         userData.email,
-        userData.userId
+        userData.userId,
       );
 
       // Assert
@@ -297,23 +315,28 @@ describe('Auth Functions', () => {
         firstName: 'John',
         lastName: 'Smith',
         email: 'john.smith@example.com',
-        userId: 'user123'
+        userId: 'user123',
       };
 
-      mockSupabaseClient.from().update().eq.mockReturnValue({
-        error: { code: 'unknown', message: 'Database error' }
-      });
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq.mockReturnValue({
+          error: { code: 'unknown', message: 'Database error' },
+        });
 
       // Act
       const result = await modifyAccount(
         userData.firstName,
         userData.lastName,
         userData.email,
-        userData.userId
+        userData.userId,
       );
 
       // Assert
-      expect(result).toEqual({ error: 'An unexpected error occurred. Please try again later.' });
+      expect(result).toEqual({
+        error: 'An unexpected error occurred. Please try again later.',
+      });
     });
 
     // Name validation tests
@@ -322,10 +345,12 @@ describe('Auth Functions', () => {
         'J',
         'Smith',
         'john.smith@example.com',
-        'user123'
+        'user123',
       );
-      
-      expect(result).toEqual({ error: 'First name must be at least 2 characters long' });
+
+      expect(result).toEqual({
+        error: 'First name must be at least 2 characters long',
+      });
       expect(mockSupabaseClient.from).not.toHaveBeenCalled();
     });
 
@@ -334,10 +359,12 @@ describe('Auth Functions', () => {
         'John',
         'S',
         'john.smith@example.com',
-        'user123'
+        'user123',
       );
-      
-      expect(result).toEqual({ error: 'Last name must be at least 2 characters long' });
+
+      expect(result).toEqual({
+        error: 'Last name must be at least 2 characters long',
+      });
       expect(mockSupabaseClient.from).not.toHaveBeenCalled();
     });
   });
@@ -353,7 +380,7 @@ describe('Auth Functions', () => {
 
       // Assert
       expect(mockSupabaseClient.auth.updateUser).toHaveBeenCalledWith({
-        password: newPassword
+        password: newPassword,
       });
       expect(result).toBeUndefined();
     });
@@ -362,7 +389,7 @@ describe('Auth Functions', () => {
       // Arrange
       const errorMessage = 'Password must be at least 6 characters';
       mockSupabaseClient.auth.updateUser.mockResolvedValue({
-        error: { message: errorMessage }
+        error: { message: errorMessage },
       });
       const newPassword = 'short';
 
@@ -373,6 +400,4 @@ describe('Auth Functions', () => {
       expect(result).toEqual({ error: errorMessage });
     });
   });
-
-
 });

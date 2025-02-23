@@ -58,10 +58,10 @@ export async function logout() {
   const supabase = await createClient();
 
   // Check if a user's logged in
-  const { data } = await supabase.auth.getUser()
+  const { data } = await supabase.auth.getUser();
 
   if (data.user) {
-    await supabase.auth.signOut()
+    await supabase.auth.signOut();
   }
 
   revalidatePath('/', 'layout');
