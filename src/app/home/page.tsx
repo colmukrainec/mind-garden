@@ -12,7 +12,7 @@ import {
   selectAllFromCategories,
 } from '@/utils/supabase/dbfunctions';
 
-export default async function PrivatePage() {
+export default async function Dashboard() {
   const supabase = await createClient();
 
   const { data: authData, error: authError } = await supabase.auth.getUser();

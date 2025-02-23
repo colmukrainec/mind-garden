@@ -57,10 +57,11 @@ export async function signup(formData: FormData) {
 export async function logout() {
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signOut();
+  // Check if a user's logged in
+  const { data } = await supabase.auth.getUser();
 
-  if (error) {
-    redirect('/error');
+  if (data.user) {
+    await supabase.auth.signOut();
   }
 
   revalidatePath('/', 'layout');
@@ -126,7 +127,6 @@ export async function modifyPassword(newPassword: string) {
 
 const validateName = (name: FormDataEntryValue | null, field: string) => {
   if (!name) return { error: `${field} is required` };
-  if (typeof name !== 'string') return { error: `${field} must be a string` };
-  if (name.length < 2)
+  if (typeof name === 'string' && name.length < 2)
     return { error: `${field} must be at least 2 characters long` };
 };

@@ -4,20 +4,14 @@ import { Bell } from 'lucide-react';
 import { createClient } from '@/utils/supabase/server';
 import { Particles } from '@/components/magicui/particles';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import { JournalButton } from '@/components/journal-button';
-import Footer from '@/components/footer';
 
-import DeleteAccount from '@/components/delete-account';
 import ModifyAccount from '@/components/modify-account-info';
 import ModifyPassword from '@/components/modify-password';
+import DeleteAccount from '@/components/delete-account';
+import Footer from '@/components/footer';
+
 import { ToastContainer } from 'react-toastify';
 
 export default async function ProfilePage() {
@@ -73,20 +67,8 @@ export default async function ProfilePage() {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto space-y-8">
           <ModifyAccount profileData={profileData} userId={userId} />
-
           <ModifyPassword />
-
-          <Card className="bg-white/50 backdrop-blur-sm rounded-2xl">
-            <CardHeader>
-              <CardTitle>Delete Account</CardTitle>
-              <CardDescription>
-                Permanently delete your account and all associated data
-              </CardDescription>
-            </CardHeader>
-            <CardFooter>
-              <DeleteAccount userId={userId} />
-            </CardFooter>
-          </Card>
+          <DeleteAccount userId={userId} />
         </div>
       </main>
       <Footer />
