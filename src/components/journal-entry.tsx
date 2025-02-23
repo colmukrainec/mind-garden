@@ -1,15 +1,15 @@
 'use client';
 
 //Core imports
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 
 // Third party imports
-import { Brain, NotebookPen } from 'lucide-react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Brain, NotebookPen, RotateCcw } from "lucide-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 // Utility
-import { saveJournalEntry } from '@/utils/supabase/dbfunctions';
+import { saveJournalEntry, getRandomPrompt } from "@/utils/supabase/dbfunctions";
 
 //UI
 import {
@@ -29,6 +29,11 @@ interface JournalEntryProps {
 
 export function JournalEntryCard({ userId }: JournalEntryProps) {
   const [entry, setEntry] = useState(''); // State to store textarea input
+  const [prompt, setPrompt] = useState("")
+
+  useEffect(() => {
+    getPrompt()
+  }, []);
 
   const handleInsert = async () => {
     //dont allow empty inserts
@@ -50,6 +55,15 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
     }
   };
 
+  const getPrompt = async () =>{
+    const result = await getRandomPrompt();
+
+    if(result?.error)
+      setPrompt('Something went wrong...')
+    else if(result.data)
+      setPrompt(result.data[0].prompt)
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <Card className="bg-white/50 backdrop-blur-sm rounded-2xl">
@@ -64,6 +78,13 @@ export function JournalEntryCard({ userId }: JournalEntryProps) {
           <div className="flex items-center space-x-2">
             <CardDescription>Journal your thoughts</CardDescription>
             <Brain className="h-4 w-4" />
+          </div>
+          <div className="flex items-center space-x-2 justify-center pt-8">
+            <CardDescription>Need inspiration?</CardDescription>
+            <CardDescription><b>{prompt}</b></CardDescription>
+            <button onClick={getPrompt}>
+              {<RotateCcw className="h-4 w-4"/>}
+            </button>
           </div>
         </CardHeader>
 
