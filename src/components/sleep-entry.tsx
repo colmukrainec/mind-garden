@@ -21,9 +21,17 @@ interface SleepTrackerProps {
   readonly userId: string;
 }
 
+const getCurrentDateTime = () => {
+  const now = new Date();
+  const offset = now.getTimezoneOffset();
+  now.setMinutes(now.getMinutes() - offset);
+
+  return now.toISOString().slice(0, 16); 
+};
+
 export function SleepEntryCard({ userId }: SleepTrackerProps) {
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState(getCurrentDateTime);
+  const [endTime, setEndTime] = useState(getCurrentDateTime);
 
   const handleInsert = async() => {
     // dont allow empty inserts
@@ -39,14 +47,18 @@ export function SleepEntryCard({ userId }: SleepTrackerProps) {
 
     const result = await insertSleepEntry(startTime, endTime, userId);
 
-    if (result?.error || (!result?.error && !result?.data)) {
-      toast.warn("Error saving sleep entry!");
-    } else {
-      toast.success("Sleep entry saved successfully!");
-      setStartTime("");
-      setEndTime("");
+    if (result?.error) {
+      if (typeof result.error === "string") {
+        toast.warn(result.error);
+      } else {
+        toast.warn("Error saving sleep entry!");
+      }
+      return;
     }
-
+  
+    toast.success("Sleep entry saved successfully!");
+    setStartTime("");
+    setEndTime("");
   }
 
   return (

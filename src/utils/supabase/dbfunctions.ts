@@ -230,19 +230,31 @@ export async function deleteJournalEntry(entryId: string) {
  * @param userId - The user's ID
  */
 export async function insertSleepEntry(startTime: string, endTime: string, userId: string) {
+  // Get today's date for entry date 
   const entryDate = new Date().toISOString().split("T")[0];
 
-  const start = new Date(startTime);
-  const end = new Date(endTime);
+  // Check if an entry already exists for this user on today's date
+  const { data: existingEntry, error } = await selectData("sleep_entries", {
+    user_id: userId,
+    entry_date: entryDate
+  });
 
-  const startTimeOnly = start.toTimeString().slice(0, 5);
-  const endTimeOnly = end.toTimeString().slice(0, 5); 
+  if (error) {
+    console.error("Error checking existing sleep entry:", error);
+    return {error};
+  }
 
+  // if an entry already exists for the current entry date, return an error
+  if (existingEntry && existingEntry.length > 0) {
+    return {error: "An entry already exists for today."};
+  }
+
+  // Insert new entry if no duplicate exists
   return await insertData("sleep_entries", {
     user_id: userId,
-    start: startTimeOnly, 
-    end: endTimeOnly,     
-    entry_date: entryDate 
+    entry_date: entryDate,
+    start: startTime,
+    end: endTime
   });
 }
 
