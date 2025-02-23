@@ -269,14 +269,14 @@ export async function deleteJournalEntry(entryId: string) {
   return await supabase.from('journal_entries').delete().eq('id', entryId);
 }
 
-export async function getRandomPrompt(){
-  const supabase = createClient()
+export async function getRandomPrompt() {
+  const supabase = createClient();
 
   const { data, error } = await supabase.rpc('get_random_prompt');
-  
-  if(error){
+
+  if (error) {
     return { error: error.message };
   }
 
-  return {data};
+  return { data };
 }
