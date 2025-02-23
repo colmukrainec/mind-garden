@@ -5,7 +5,7 @@ import {
   deleteAccount,
   modifyAccount,
   modifyPassword,
-} from '@/actions/auth';
+} from '../../actions/auth';
 import { createClient } from './server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
